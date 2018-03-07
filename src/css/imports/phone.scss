@@ -1,0 +1,137 @@
+.logo img {
+	width: 310px;
+}
+.destaques {
+		.thumbs li{
+			max-width: 50px;
+			min-width: 43px;
+		}
+		.big-image img{
+			max-width: 193px;
+		} 
+	}
+	.dropdown {
+		width: 300px;
+
+		.currentitems {
+			right: 15px;
+		}
+		#principal {
+			padding-left: 70px;
+		}
+	}
+	.navbar-default .navbar-nav .open .dropdown-menu>li>a {
+		color: $whiteColor;
+	}
+	.navbar-default .navbar-nav .open .dropdown-menu>li>a:focus, .navbar-default .navbar-nav .open .dropdown-menu>li>a:hover {
+		background: $greenColor !important;
+		color: $whiteColor;
+		border-radius: 4px;
+	}
+	.dropdown-menu{
+		background-color: $orangeColor;
+		min-width: auto;
+		
+		a:link {
+			float:left;
+			margin: 1px 0px;
+			padding: 15px 12px 15px 15px !important;
+			display: block;
+			font-size: 13px;
+			clear: both;
+			color: #797979;
+			margin: 0 -37px;
+			border-radius: 0;
+			color: $whiteColor;
+		}
+		a:hover, a:focus {
+			background-color: $orangeColor !important;  
+			color: $whiteColor;
+		}
+		
+		.text {
+			color: #ffffff;
+			font-weight: 400;
+			white-space: normal;
+			font-size: 13px;
+			vertical-align: top;
+			margin-top: 0;
+			margin-left: 0px;
+		}
+		.installments {
+			color: $blackColor;
+			margin-top: 3px;
+			margin-left: 0;
+			font-size: 13px;
+			text-shadow: none;
+			font-weight: 700;
+		}
+		.incash-text {
+			color: $blackColor;
+
+			margin-top: 0;
+			margin-left: 0;
+			font-size: 13px;
+			text-shadow: none;
+			font-weight: 700;
+		}
+		.subtotal, .subtotalone, .subtotalonetwo {
+			text-align: right;
+			color: $blackColor;
+			width: 100%;
+			clear: both;
+			font-size: 12px;
+			font-weight: 700;
+		}
+		.noborder {
+			border: none !important;
+		}
+		hr {
+			margin: 2px 0px 6px 0px;
+			border-top-color: $blackColor;
+		}
+		.subtotal {
+			margin-top: 15px;
+		}
+		.subtotalone {
+			margin-top: 5px;
+		}
+		.subtotalonetwo {
+			margin-top: 3px;
+			margin-bottom: 15px;
+		}
+
+	}
+
+
+	.navbar-nav {
+		margin: 0;
+
+		.search {
+			width: 96.2% !important;
+			margin-top: 9px;
+			margin-right: 25px;
+			background: $mainColor;
+			cursor: pointer;
+			width: 50px;
+			display: block;
+			clear: both;
+		}
+		li>.dropdown-menu:before {
+			display: none;
+		}
+		
+		.open .dropdown-menu {
+			margin-top: 0;
+		}
+
+		.navbar-toggle, .open .collapsed  {
+			margin-right: 0;
+		}
+		li.dropdown  a.collapsed {
+			padding-right: 0;
+		}
+		.dropdown {
+			margin-right: 36px;
+		}
+	}

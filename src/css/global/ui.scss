@@ -1,0 +1,32 @@
+/* CSS feito em SASS usando o watch do 'node-sass-chokidar', o arquivo compilado final é ui.css que contém todos os estilos  */
+/* A pasta global é a única transforma o SCSS em CSS legível */
+/* Ao realizar a build final, o comando do Create React App recebe o filtro AutoPrefixer */
+
+/* Import completo do Bootstrap do CSS com Glyphicons */
+@import "./bootstrap.min.css";
+
+/* Arquivo de variáveis para cores e imagens */
+@import "../imports/variables.scss";
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,500,700');
+
+/* Importa o estilo do menu do topo */
+@import "./js-offcanvas.css";
+
+/* Arquivo  que contém os estilos para o restante da App */
+@import "../imports/style.scss" ;
+
+/* Media queries para tornar o site acessível em toas as plataformas */
+/* Tablet */
+@media screen and (max-width: 1200px){
+	@import "../imports/tablet.scss";
+}
+
+/* Tablet vertical */
+@media screen and (max-width: 991px) {
+	@import "../imports/tablet2.scss";
+}
+
+/* Mobile phones */
+@media screen and (max-width: 767px), only screen and (max-device-width: 480px) {
+	@import "../imports/phone.scss";
+}

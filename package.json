@@ -1,0 +1,30 @@
+{
+  "name": "crudforms",
+  "version": "0.1.0",
+  "private": true,
+  "devDependencies": {
+    "react-scripts": "0.8.5",
+    "node-sass-chokidar": "0.0.3"
+  },
+  "dependencies": {
+    "google-maps-react": "^1.1.2",
+    "npm-run-all": "^4.1.2",
+    "react": "^15.4.2",
+    "react-bootstrap": "^0.32.1",
+    "react-dom": "^15.4.2",
+    "react-redux": "^5.0.6",
+    "react-router": "^3.0.0",
+    "redux": "^3.7.2",
+    "redux-thunk": "^2.2.0"
+  },
+  "scripts": {
+    "build-css": "node-sass-chokidar src/css/global -o src/css",
+    "watch-css": "npm run build-css && node-sass-chokidar src/css/global -o src/css --watch --recursive",
+    "start-js": "react-scripts start",
+    "start": "npm-run-all -p watch-css start-js",
+    "build-js": "react-scripts build",
+    "build": "npm-run-all build-css build-js",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  }
+}
