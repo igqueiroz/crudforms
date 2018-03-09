@@ -22,7 +22,6 @@ ReactDOM.render(
         <Route  component={Top} store={datastore}>
           <Route path="/" component={SignIn} />
           <Route path="/logout" component={LogOut} />
-          <Route path="/laureate" component={Laureate} />
           <Route path="/users" component={Users} />
           <Route path="/users" component={Users} />
         </Route>
