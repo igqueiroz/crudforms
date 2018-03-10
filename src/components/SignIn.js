@@ -8,8 +8,8 @@ export default class SignIn extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            username: '',
-            password: ''
+            username: 'igor@igorqueiroz.com.br',
+            password: 'paguemob879'
         };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
@@ -23,23 +23,24 @@ export default class SignIn extends Component {
 
     // usa a Geo Location do navegador e envia os dados para o estado do componente 
     handleSubmit(event) {
+        console.log(this.state.username  + ':' + base64.encode(this.state.password));
         document.querySelector('.locate').className = 'locate progress';
         event.preventDefault();
         const headers = new Headers();
-        headers.append('Content-Type', 'text/json');
-        headers.append("Access-Control-Allow-Credentials", "true");
+        headers.append('Content-Type', 'application/json');
         headers.append('Authorization', 'Basic ' + base64.encode(this.state.username  + ':' + this.state.password));
         const requestData = {          
-          method: 'POST',
-          headers: headers,
-          
+          method: 'GET',
+          headers: headers
         }
-        fetch(`https://paguemob-interview-environment.firebaseapp.com/contacts`,requestData)
+        fetch(`https://paguemob-interview-environment.firebaseapp.com/contacts`, requestData)
             .then(response => {
                 if(response.ok) {
                     document.querySelector('.locate').className = 'locate';
+                    console.log(response)
                 }
                 else {
+                    console.log(response)
                     throw new Error("Não rolou comunicação com a API");
                 }
             })      
