@@ -27,10 +27,12 @@ export default class SignIn extends Component {
         event.preventDefault();
         const headers = new Headers();
         headers.append('Content-Type', 'text/json');
+        headers.append("Access-Control-Allow-Credentials", "true");
         headers.append('Authorization', 'Basic ' + base64.encode(this.state.username  + ':' + this.state.password));
         const requestData = {          
           method: 'POST',
-          headers: headers
+          headers: headers,
+          
         }
         fetch(`https://paguemob-interview-environment.firebaseapp.com/contacts`,requestData)
             .then(response => {
