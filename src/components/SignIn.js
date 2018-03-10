@@ -1,7 +1,8 @@
-// Arquivo de Login para o Firebase
+// Para uma atenticação completa pelo Firebase é necessário ter as chaves da API apiKey
+// Doc: https://firebase.google.com/docs/auth/users
 
 import React, { Component }  from 'react'
-import firebase from 'firebase'
+import base64 from 'base-64'
 
 export default class SignIn extends Component {
     constructor(props) {
@@ -22,28 +23,24 @@ export default class SignIn extends Component {
 
     // usa a Geo Location do navegador e envia os dados para o estado do componente 
     handleSubmit(event) {
-        event.preventDefault();
-        firebase.initializeApp({
-            authDomain: "paguemob-interview-environment.firebaseapp.com",
-        })
-        firebase.auth().doSignInWithEmailAndPassword(this.state.username, this.state.password)
-             .then(() => {
-                 alert('Email validado')
-             })
-            .catch(function(error) {
-                // Handle Errors here.
-                var errorCode = error.code;
-                var errorMessage = error.message;
-                if (errorCode === 'auth/wrong-password') {
-                    alert('Wrong password.');
-                } else {
-                    alert(errorMessage);
-                }
-                    console.log(error);
-            });
-        
-        //alert("Desculpe, você deve ativar o serviço de Geolocation para continuar.");
         document.querySelector('.locate').className = 'locate progress';
+        event.preventDefault();
+        const headers = new Headers();
+        headers.append('Content-Type', 'text/json');
+        headers.append('Authorization', 'Basic ' + base64.encode(this.state.username  + ':' + this.state.password));
+        const requestData = {          
+          method: 'POST',
+          headers: headers
+        }
+        fetch(`https://paguemob-interview-environment.firebaseapp.com/contacts`,requestData)
+            .then(response => {
+                if(response.ok) {
+                    document.querySelector('.locate').className = 'locate';
+                }
+                else {
+                    throw new Error("Não rolou comunicação com a API");
+                }
+            })      
     }
 
     render() {
@@ -55,11 +52,11 @@ export default class SignIn extends Component {
                         <h4>Digite seu login e senha:</h4>
                         <form id="form-contato" onSubmit={this.handleSubmit}>
                             <div className="col-xs-6 extras">
-                                <input required name="username" id="username" type="text" className="input" placeholder="Name" ref="Login" autoComplete="off" value={this.state.username} onChange={this.handleChange}   />
+                                <input required name="username" id="username" type="text" className="input" placeholder="Name" ref="Login" autoComplete="off" value="igor@igorqueiroz.com.br" onChange={this.handleChange}   />
                                 <label htmlFor="txtFullname">Username</label>
                             </div>
                             <div className="col-xs-6 extras">
-                                <input required name="email" id="password" type="password" className="input" placeholder="Key" ref="email" autoComplete="off" value={this.state.password}  onChange={this.handleChange} />
+                                <input required name="email" id="password" type="password" className="input" placeholder="Key" ref="email" autoComplete="off" value="paguemob879"  onChange={this.handleChange} />
                                 <label htmlFor="txtEmail">Password</label>
                              </div>
                             <div className="col-xs-4 extras" />
