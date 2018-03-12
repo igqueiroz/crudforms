@@ -532,8 +532,10 @@ button.form {
   height: 30px; }
 
 #form-contato input.blocked {
-  border-bottom: none;
-  height: 30px; }
+  border-bottom: none; 
+  height: 30px;
+  border-bottom: none; 
+}
 
 .modal-header .close {
   margin-top: 0px;
