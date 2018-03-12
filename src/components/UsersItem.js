@@ -18,8 +18,10 @@ export default class UsersItem extends Component {
     openEdit(e) {
     	e.preventDefault();
     	const editId = e.currentTarget.getAttribute('data-id');
+    	document.querySelector('.address').disabled = true;
     	document.querySelectorAll('input.'+ editId).forEach((input) => {
     		input.disabled = false;
+    		input.classList.remove('blocked');
     	})
     }
     openModalAdress(event) {
@@ -53,7 +55,7 @@ export default class UsersItem extends Component {
 				<td><input className={this.props.id + ' input useritem blocked'} type="text" name="type" disabled  value={this.props.gender} ref={(input) => this.gender = input }  placeholder="Novo Sexo" /></td>
 				<td><input className={this.props.id + ' input useritem blocked'} type="text" name="type" disabled  value={this.props.telephone} ref={(input) => this.telephone = input } placeholder="Novo telefone" /></td>
 				<td><input className={this.props.id + ' input useritem blocked'} type="text" name="type" disabled  value={this.props.website} ref={(input) => this.website = input }  placeholder="Novo website" /></td>
-				<td><button className="form" data-id={this.props.id} onClick={this.props.openModalAdress}>See Address</button></td>
+				<td><button className="form address" data-id={this.props.id} onClick={this.props.openModalAdress}>See Address</button></td>
 				<td><button className="form" data-id={this.props.id} onClickCapture={(e) => this.openEdit(e)}>Edit</button></td>
 			</tr>
 		)

@@ -527,8 +527,13 @@ button.form {
 
 #form-contato input.useritem {
   font-size: 0.9em;
+  border-bottom: 1px dotted #ccc;
+  text-align: center;
+  height: 30px; }
+
+#form-contato input.blocked {
   border-bottom: none;
-  text-align: center; }
+  height: 30px; }
 
 .modal-header .close {
   margin-top: 0px;
