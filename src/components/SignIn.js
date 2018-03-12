@@ -9,7 +9,8 @@ export default class SignIn extends Component {
         super(props);
         this.state = {
             username: 'igor@igorqueiroz.com.br',
-            password: 'paguemob879'
+            password: 'paguemob879',
+            msg: ''
         };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
@@ -23,7 +24,6 @@ export default class SignIn extends Component {
 
     // usa a Geo Location do navegador e envia os dados para o estado do componente 
     handleSubmit(event) {
-        console.log(this.state.username  + ':' + base64.encode(this.state.password));
         document.querySelector('.locate').className = 'locate progress';
         event.preventDefault();
         const headers = new Headers();
@@ -37,13 +37,18 @@ export default class SignIn extends Component {
             .then(response => {
                 if(response.ok) {
                     document.querySelector('.locate').className = 'locate';
-                    console.log(response)
+                   return response.json()
                 }
                 else {
-                    console.log(response)
                     throw new Error("Não rolou comunicação com a API");
                 }
-            })      
+            })
+            .then(list => {
+                console.log(list);
+            })
+            .catch(error => {
+                this.setState({msg: error.message})
+            }) 
     }
 
     render() {
@@ -53,6 +58,7 @@ export default class SignIn extends Component {
                     <div className="row">
                         <div className="logo"><img src="images/mysitelogo@400x-100.png" alt="CRUD Forms" title="CRUD Forms" /></div>
                         <h4>Digite seu login e senha:</h4>
+                        <span>{this.state.error}</span>
                         <form id="form-contato" onSubmit={this.handleSubmit}>
                             <div className="col-xs-6 extras">
                                 <input required name="username" id="username" type="text" className="input" placeholder="Name" ref="Login" autoComplete="off" value="igor@igorqueiroz.com.br" onChange={this.handleChange}   />

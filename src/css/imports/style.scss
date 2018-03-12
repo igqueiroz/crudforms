@@ -540,6 +540,45 @@ button:focus {
 	border-radius: 4px;
 }
 
+.table-responsive tr td { 	
+	vertical-align: middle !important;
+	position: relative;
+}
+
+#form-contato label.type {
+	top: 4px;
+    font-size: 70%;
+}
+
+#form-contato input.useritem:placeholder-shown:not(:focus) + * {
+	font-size: 99%;
+    top: 16px;
+}
+
+button.form {
+	margin-top: 0px;
+    margin-bottom: 4px;
+    padding: 9px 4px;
+    font-size: 0.8em;
+}
+
+#form-contato input.useritem {
+	font-size: 0.9em;
+	border-bottom: none;
+	text-align: center;
+}
+
+#form-contato input.blocked {
+
+}
+
+.modal-header .close {
+	margin-top: 0px;
+    float: right;
+    width: 24px;
+    margin-bottom: 0px;
+    padding: 2px 0px;
+}
 
 .navbar-collapse, .container-fluid {
 	padding-right: 0;
