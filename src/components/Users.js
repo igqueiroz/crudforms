@@ -20,6 +20,7 @@ export default class Users extends Component {
         };
         this.handleChange = this.handleChange.bind(this);
         this.loadTypeofRegister = this.loadTypeofRegister.bind(this);
+        this.genderType = this.genderType.bind(this);
     }
 
 	
@@ -28,6 +29,15 @@ export default class Users extends Component {
         this.setState({selectionType: event.target.value});
         this.loadTypeofRegister(event.target.value);
 	}
+	genderType(gender) {
+		if (gender == 'm') {
+			return 'Male';
+			}
+			else {
+				return 'Female'
+			}
+	}
+	
 
 	loadTypeofRegister(typeOfRegister) {
 			//document.querySelector('.locate').className = 'locate progress';
@@ -51,7 +61,7 @@ export default class Users extends Component {
 		            })
 		            .then(list => {
 		                this.setState({users: list})
-		                console.log(list[0])
+		                
 		            }) 
 			}
 			else {
@@ -103,7 +113,7 @@ export default class Users extends Component {
 									name={users.userInfo.name}
 									email={users.userInfo.email}
 									cpf={users.userInfo.cpf}
-									gender={users.userInfo.gender}
+									gender={this.genderType(users.userInfo.gender)}
 									telephone={users.userInfo.telephone}
 									website={users.userInfo.website}
 								/>)

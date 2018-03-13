@@ -236,12 +236,13 @@ button:focus {
 		float: left;
 		width: 100%;
 	}
-
 	li:hover input, form#form-contato li:hover label  {
 		color: #ea5f2a;
 		border-color: #ea5f2a;
 	}
-
+	.table {
+		width: 1170px;
+	}
 	li input:focus {
 		color: #00c8b3;
 		border-color: #00c8b3;
@@ -294,9 +295,6 @@ button:focus {
 		outline: none;
 		border-color: rgba(0, 0, 0, 0.5);
 	}
-
-
-
 	.hidden-xs {
 		color: #fff;
 	}
@@ -308,6 +306,20 @@ button:focus {
 	}
 	.twice {
 		width: 50%;
+	}
+	input.useritem {
+		font-size: 0.9em;
+		border-bottom: 1px dotted #ccc;
+		text-align: center;
+		height: 30px;
+	}
+
+	input.blocked {
+		border-bottom: none;
+	}
+
+	button.close-edit {
+		display: none;
 	}
 }
 
@@ -560,17 +572,6 @@ button.form {
     margin-bottom: 4px;
     padding: 9px 4px;
     font-size: 0.8em;
-}
-
-#form-contato input.useritem {
-	font-size: 0.9em;
-	border-bottom: 1px dotted #ccc;
-	text-align: center;
-	height: 30px;
-}
-
-#form-contato input.blocked {
-	border-bottom: none;
 }
 
 .modal-header .close {
