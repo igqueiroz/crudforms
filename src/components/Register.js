@@ -1,17 +1,15 @@
-// Para uma atenticação completa pelo Firebase é necessário ter as chaves da API apiKey, no caso foi usado a autenticação básica e as credentials armazenados na Store.
-// Uma vez as credentials armazenadas diminuimos a quantidade de requisições. 
+// Para uma atenticação completa pelo Firebase é necessário ter as chaves da API apiKey
 // Doc: https://firebase.google.com/docs/auth/users
 
 import React, { Component }  from 'react'
 import base64 from 'base-64'
-import { browserHistory } from 'react-router'
 
-export default class SignIn extends Component {
+export default class Register extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            username: '',
-            password: '',
+            username: 'igor@igorqueiroz.com.br',
+            password: 'paguemob879',
             msg: ''
         };
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -42,20 +40,14 @@ export default class SignIn extends Component {
                    return response.json()
                 }
                 else {
-                    document.querySelector('.locate').className = 'locate';
-                    throw new Error("Não foi possível fazer o login, verifique seu login e senha, e tente novamente.");
+                    throw new Error("Não rolou comunicação com a API");
                 }
             })
             .then(list => {
-                localStorage.setItem('auth-token', base64.encode(this.state.username  + ':' + this.state.password));
-                browserHistory.push('/modules');
-                // token encodado $(localStorage.getItem('auth-token'))                
+                console.log(list);
             })
             .catch(error => {
                 this.setState({msg: error.message})
-                setTimeout(() => {
-                    this.setState({msg: ''})
-                }, 5000);
             }) 
     }
 
@@ -66,14 +58,14 @@ export default class SignIn extends Component {
                     <div className="row">
                         <div className="logo"><img src="images/mysitelogo@400x-100.png" alt="CRUD Forms" title="CRUD Forms" /></div>
                         <h4>Digite seu login e senha:</h4>
-                        <span className="alert">{this.state.msg}</span>
+                        <span>{this.state.error}</span>
                         <form id="form-contato" onSubmit={this.handleSubmit}>
                             <div className="col-xs-6 extras">
-                                <input required name="username" id="username" type="text" className="input" placeholder="Name" ref="Login" autoComplete="off" onChange={this.handleChange}   />
+                                <input required name="username" id="username" type="text" className="input" placeholder="Name" ref="Login" autoComplete="off" value="igor@igorqueiroz.com.br" onChange={this.handleChange}   />
                                 <label htmlFor="txtFullname">Username</label>
                             </div>
                             <div className="col-xs-6 extras">
-                                <input required name="email" id="password" type="password" className="input" placeholder="Key" ref="email" autoComplete="off" onChange={this.handleChange} />
+                                <input required name="email" id="password" type="password" className="input" placeholder="Key" ref="email" autoComplete="off" value="paguemob879"  onChange={this.handleChange} />
                                 <label htmlFor="txtEmail">Password</label>
                              </div>
                             <div className="col-xs-4 extras" />
