@@ -22,7 +22,7 @@ export default class DataApi {
                 }
                 else {
                     document.querySelector('.locate').className = 'locate';
-                    throw new Error("Não foi possível fazer o login, verifique seu login e senha, e tente novamente.");
+                    throw new Error('Não foi possível fazer o login, verifique seu usuário e senha, e tente novamente.');
                 }
             })
             .then(list => {
@@ -30,11 +30,17 @@ export default class DataApi {
                 browserHistory.push('/modules');
             })
             .catch(error => {
-                this.setState({msg: error.message})
+                dispatch({type:'NOTIFY', error});
                 setTimeout(() => {
-                    this.setState({msg: ''})
-                }, 5000);
+                    const clear = '';
+                    dispatch({type:'NOTIFY', clear});
+                },  5000);
             })
+      }
+    }
+    static menu(changeMenuItems) {
+      return dispatch => {
+        dispatch({type:'MENULOGIN', changeMenuItems});
       }
     }
     // Lista os dados recebidos e guardados na API do banco MongoDB

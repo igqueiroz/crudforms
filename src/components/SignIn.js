@@ -31,6 +31,13 @@ export default class SignIn extends Component {
         this.props.routes[0].store.dispatch(DataApi.login(this.state.username,this.state.password));
     }
 
+    componentDidMount() {
+        this.props.routes[0].store.subscribe(() => {
+            // notify é o nome gravado na store vindo da função de seu reducer
+            this.setState({msg: this.props.routes[0].store.getState().notify})
+         })
+    }
+
     render() {
         return (
             <section className="destaques">

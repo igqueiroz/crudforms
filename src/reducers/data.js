@@ -5,4 +5,5 @@ export function data(users=[], action){
   if(action.type === 'LISTDATA'){
     return action.listing;
   }  
+  return users
 } 
