@@ -19,9 +19,10 @@ export default class Menus extends Component {
 										<span className="icon-bar"></span>	
 									</Dropdown.Toggle>
 									<Dropdown.Menu>
-						        		<MenuItem className="subtotalone noborder" href="/">Home</MenuItem>
-										<MenuItem className="subtotalone noborder" href="/register">Member Register</MenuItem>
-										<MenuItem className="subtotalonetwo noborder" href="/list">Member List</MenuItem>
+						        		<MenuItem className="subtotalone noborder" href="/">SignIn</MenuItem>
+										<MenuItem className="subtotalone noborder" href="/register">Register</MenuItem>
+										<MenuItem className="subtotalonetwo noborder" href="/users">List/Edit Users</MenuItem>
+										<MenuItem className="subtotalonetwo noborder" href="/logout">→ Logout</MenuItem>
 									</Dropdown.Menu>
 						        </Dropdown>
 						      </div>
@@ -33,5 +34,3 @@ export default class Menus extends Component {
 		)
 	}
 }
-//<Link to="/" href="/" className="dropdown-toggle js-offcanvas-trigger navbar-toggle collapsed" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-//</Link>
