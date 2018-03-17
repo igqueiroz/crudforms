@@ -2,30 +2,16 @@
 
 import React, { Component }  from 'react'
 import { Navbar, MenuItem, Dropdown } from 'react-bootstrap';
-import DataApi  from '../logic/DataApi'
 
-export default class Menus extends Component {
-
-	constructor(props) {
-	super(props);
-        this.state = {
-            loggedIn: true,
-        };
-        this.menuLogged = this.menuLogged.bind(this);
-    }
-
+export default class Menus extends Component {	
 	componentDidMount() {
-		this.props.routes[0].store.subscribe(() => {
-            // menu é o nome gravado na store vindo da função de seu reducer
-            this.setState({loggedIn: this.props.routes[0].store.getState().menu})
-		})
+		if (localStorage.getItem('auth-token') !== null) {
+			document.querySelector('.sign').style.display = "none";
+       		document.querySelectorAll('.logged').forEach( (element) => {
+        		element.style.display = "block";
+      		})   
+		}
 	}
-
-	menuLogged() {
-		this.props.routes[0].store.dispatch(DataApi.menu(true));
-	}
-
-
 	render() {	
 		return(
 			<section className="bg-primary">
@@ -41,10 +27,10 @@ export default class Menus extends Component {
 										<span className="icon-bar"></span>	
 									</Dropdown.Toggle>
 									<Dropdown.Menu>
-						        		{<MenuItem className="subtotalone noborder" href="/">SignIn</MenuItem>}
-										{this.state.menuLogged && <MenuItem className="subtotalone noborder" href="/register">Register</MenuItem>}
-										{this.state.menuLogged && <MenuItem className="subtotalonetwo noborder" href="/users">List/Edit Users</MenuItem>}
-										{this.state.menuLogged && <MenuItem className="subtotalonetwo noborder" href="/logout">→ Logout</MenuItem>}
+						        		<MenuItem className="subtotalone noborder sign" href="/">SignIn</MenuItem>
+										<MenuItem className="subtotalone noborder logged" href="/register">Register</MenuItem>
+										<MenuItem className="subtotalonetwo noborder logged" href="/users">List/Edit Users</MenuItem>
+										<MenuItem className="subtotalonetwo noborder logged" href="/logout">→ Logout</MenuItem>
 									</Dropdown.Menu>
 						        </Dropdown>
 						      </div>

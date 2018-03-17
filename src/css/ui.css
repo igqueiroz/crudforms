@@ -89,6 +89,12 @@ button:focus {
   /* opacidade em 30% */
   /*transform: scale(0.95);  escala 5% */ }
 
+li.sign {
+  display: block; }
+
+li.logged {
+  display: none; }
+
 .extras button {
   margin-top: 30px; }
 

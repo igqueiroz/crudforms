@@ -11,12 +11,11 @@ import { createStore, applyMiddleware, combineReducers } from 'redux'; // Flux M
 import thunkMiddleware from 'redux-thunk'; // na execução do redux, permite retornar funções no dispatch
 import { data } from './reducers/data'; // reducers que ajudam a tornar o componente menor
 import { notify } from './reducers/notify'; // reducers que ajudam a tornar o componente menor
-import { menu } from './reducers/menu'; // reducers que ajudam a tornar o componente menor
 import { Provider } from 'react-redux'; // passa a store para árvore de componentes
 import './css/ui.css'; // SASS compilado com todo o CSS minificado da App
 
 // combina os 2 reducers, um executa mensagem de erro e o outro manipula a lista de usuários
-const reducers = combineReducers({data,notify,menu});
+const reducers = combineReducers({data,notify});
 
 // cria uma store com o Redux que pode ser acessado facilmente de qualquer componente da aplicação
 const datastore = createStore(reducers,applyMiddleware(thunkMiddleware));

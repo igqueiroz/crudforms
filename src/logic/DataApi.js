@@ -28,6 +28,10 @@ export default class DataApi {
             .then(list => {
                 localStorage.setItem('auth-token', credentials);
                 browserHistory.push('/modules');
+                document.querySelector('.sign').style.display = "none";
+                document.querySelectorAll('.logged').forEach( (element) => {
+                  element.style.display = "block";
+                })
             })
             .catch(error => {
                 dispatch({type:'NOTIFY', error});
@@ -38,11 +42,7 @@ export default class DataApi {
             })
       }
     }
-    static menu(changeMenuItems) {
-      return dispatch => {
-        dispatch({type:'MENULOGIN', changeMenuItems});
-      }
-    }
+
     // Lista os dados recebidos e guardados na API do banco MongoDB
     static list(listUrl){
       return dispatch => {  

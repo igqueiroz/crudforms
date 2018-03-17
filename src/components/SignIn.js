@@ -33,7 +33,7 @@ export default class SignIn extends Component {
 
     componentDidMount() {
         this.props.routes[0].store.subscribe(() => {
-            // notify é o nome gravado na store vindo da função de seu reducer
+            // notify é o espaço armazenado na store criado da função de seu reducer
             this.setState({msg: this.props.routes[0].store.getState().notify})
          })
     }
