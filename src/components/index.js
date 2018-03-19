@@ -2,7 +2,7 @@
 
 import Menus from './Menus'
 import React  from 'react'
-import { Link, browserHistory } from 'react-router';
+import { Link } from 'react-router';
 
 // O children carrega todos os componentes a partir do Menu
 export const Top = ( { children } ) =>

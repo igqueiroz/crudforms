@@ -4,7 +4,6 @@
 
 import React, { Component }  from 'react'
 import DataApi  from '../logic/DataApi'
-import { browserHistory } from 'react-router'
 
 export default class SignIn extends Component {
     constructor(props) {

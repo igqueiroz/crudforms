@@ -43,6 +43,61 @@ export default class DataApi {
       }
     }
 
+    static register(typeOfUser, NewUserData) {
+      return dispatch => {
+        const headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        headers.append('Authorization', 'Basic ' + localStorage.getItem('auth-token'));
+         NewUserData[3] = (NewUserData[3] = 'Male') ? "m" : "f";
+        const requestData = {
+          method: 'GET',
+          body: JSON.stringify({
+              "userInfo": {
+                "website": NewUserData[0], 
+                "cnpj": "43565786790368", 
+                "name": "William Oliveira", 
+                "gender": "f", 
+                "telephone": "129873499574", 
+                "cpf": "22504323840", 
+                "email": "anapaula@gmail.com"
+              }, 
+              "address": {
+                "city": "S\u00e3o Paulo", 
+                "neighborhood": "Vila S\u00f4nia", 
+                "zip": "056340150", 
+                "country": "Brazi", 
+                "complement": "teste", 
+                "state": "SP", 
+                "streetNumber": 79, 
+                "streetName": "Rua Karlina Reiman Wandabeg"
+              }
+          }),
+          headers: headers
+        }
+        fetch(`https://paguemob-interview-environment.firebaseapp.com/contacts`, requestData)
+            .then(response => {
+                if(response.ok) {
+                    document.querySelector('.locate').className = 'locate';
+                   return response.json()
+                }
+                else {
+                    throw new Error("Falha na comunicação com o Firebase, tente novamente mais tarde.");
+                }
+            })
+            .then(list => {
+                let msg = 'Novo ID criado: ' + list;
+                dispatch({type:'NOTIFY', msg});
+            })
+            .catch(error => {
+                dispatch({type:'NOTIFY', error});
+                setTimeout(() => {
+                    const clear = '';
+                    dispatch({type:'NOTIFY', clear});
+                },  5000);
+            }) 
+      }
+    }
+
     // Lista os dados recebidos e guardados na API do banco MongoDB
     static list(listUrl){
       return dispatch => {  

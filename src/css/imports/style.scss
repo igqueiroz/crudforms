@@ -197,9 +197,60 @@ span.alert {
 	margin: auto;
 	margin: auto;
 }
+
+.top-buffer { 
+	margin-top:20px; 
+}
 .mapa {
 	z-index: -1;
 }
+.pessoa_juridica, .pessoa_fisica {
+	visibility: hidden;
+	height: 1px;
+	width: 1px;
+	overflow: hidden;
+}
+.hide-type {
+	visibility: hidden;
+	height: 1px;
+	width: 1px;
+	overflow: hidden;
+}
+.show-type {
+	visibility: visible;
+	height: auto;
+	width: auto;
+	overflow: none;
+}
+
+.map {
+	height: 1px !important;
+	width: 1px !important;
+}
+
+#pessoa_fisica,
+#empresa,
+#usuario {
+	visibility: hidden;
+}
+
+.type-register {
+	cursor: pointer;
+	padding: 10px 30px;
+	background-color: #ccc;
+	border-radius: 30px;
+}
+
+input[type=radio] + .type-register:hover {
+	background-color: $greenColor;
+	color: $whiteColor;
+}
+
+input[type=radio]:checked + .type-register {
+	background-color: $greenColor;
+	color: $whiteColor;
+}
+
 #form-contato{ 
 	label {
 		font: 1.1em "arial";
@@ -214,6 +265,20 @@ span.alert {
 		transition: .2s ease;
 		padding:0;
 	}
+
+	.uf {
+		text-transform: uppercase;
+	}
+
+	#gender {
+		width: 100%;
+		height: 33px;
+		margin-top: 11px;
+	}
+	.less-margin {
+		margin-top: -13px;
+	}
+
 	.title {
 		margin-top: 43px;
 	    display: inline-block;
@@ -224,7 +289,7 @@ span.alert {
 		border: 0;
 		border-bottom: 1px solid #b2b2b2;
 		color: #00c8b3;
-		height: 40px;
+		height: 29px;
 		width: 100%;
 		background: transparent;
 		font-size: 1.2em;
@@ -235,6 +300,7 @@ span.alert {
 		padding-left: 9px;
 		position: relative;
 		opacity: 1;
+		margin-top: 8px;
 	}
 
 	:not(output):-moz-ui-invalid {
@@ -637,3 +703,4 @@ button:hover {
 }
 
 /* END OVERWRITE BOOTSTRAP */
+

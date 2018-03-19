@@ -135,3 +135,13 @@
 			margin-right: 36px;
 		}
 	}
+
+#form-contato {
+	input:placeholder-shown:not(:focus) + * {
+		font-size: 82%;
+    	top: 20px;
+	}
+	input {
+		font-size: 0.9em;
+	}
+}

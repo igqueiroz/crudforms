@@ -42,7 +42,7 @@ export default class UsersItem extends Component {
         var newValueEdited = '';
         const newValues = [];
         document.querySelectorAll('input.'+ editId).forEach((input) => {
-            if(input.value == '' || input.value == undefined || input.value == null) {
+            if(input.value === '' || input.value === undefined || input.value === null) {
                 newValueEdited = input.nextSibling.textContent;
             }
             else {
