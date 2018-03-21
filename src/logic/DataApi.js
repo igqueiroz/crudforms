@@ -127,7 +127,6 @@ export default class DataApi {
                     document.querySelector('#postal_code2').value = "";
                     document.querySelector('#country2').value = "";
                   }
-                  
                   setTimeout(() => {
                     const clear = '';
                     dispatch({type:'SUCCESS', clear});
@@ -152,7 +151,6 @@ export default class DataApi {
     // Lista os dados recebidos do Firebase
     static list(typeOfRegister, listUrl){
       return dispatch => {
-        if(typeOfRegister === 'pessoa_fisica') {
         const headers = new Headers();
             headers.append('Content-Type', 'application/json');
             headers.append('Authorization', 'Basic ' + localStorage.getItem('auth-token'));
@@ -163,23 +161,43 @@ export default class DataApi {
             fetch(`https://paguemob-interview-environment.firebaseapp.com/contacts`, requestData)
                 .then(response => {
                     if(response.ok) {
-                        document.querySelector('.locate').className = 'locate';
-                       return response.json()
+                      return response.json()
                     }
                     else {
-                        throw new Error("Não rolou comunicação com a API");
+                        throw new Error("Erro de comunicação com o Firebase, tente novamente mais tarde.");
                     }
                 })
-                .then(users => {
-                    console.log(users)
+                .then(usersNewData => {
+                    if(typeOfRegister === 'pessoa_fisica') {
+                        let users = []
+                        users = usersNewData;
+                        console.log(users)
+                        users.forEach( (element,index) => {
+                          if(element.userInfo.cpf === "00000000000") {
+                            users.splice(index, 1);
+                          }
+
+                        })
+                        console.log(users)
+                        dispatch({type:'LISTDATA', users});
+                        document.querySelector('.pessoa_fisica').classList.add("show-type");
+                        document.querySelector('.pessoa_juridica').classList.remove("show-type");
+                    } else {
+                      // usersNewData.forEach( (element,index) => {
+                      //     if(element.userInfo.cnpj === "00000000000000") {
+                      //       console.log(index)
+                      //       users.splice(index, 1);
+                      //    }
+                      //  })
+                      //  dispatch({type:'LISTDATA', users});
+                      //  document.querySelector('.pessoa_juridica').classList.add("show-type");
+                      //  document.querySelector('.pessoa_fisica').classList.remove("hide-type");
+                      }
                     //envia a requisição para o reducer do Redux e realiza a ação desejada
                     // O "listing" do reducer deve retornar a função manipulada para devolver um Array ao nosso componente
-                    dispatch({type:'LISTDATA', users});
                     
-                }) 
-      } else {
+                })
 
-        }
       }
 
     }

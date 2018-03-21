@@ -106,34 +106,34 @@ export default class UsersItem extends Component {
         	<tr>
     			<td>
     				<input className={this.props.id + ' input useritem blocked'} type="text" disabled ref={(input) => this.name = input } placeholder="New name" />
-    				<label className="type" htmlFor={this.props.id}>{this.props.name}</label>
+    				<label className="type" htmlFor={this.props.id}>{decodeURIComponent(this.props.name)}</label>
     			</td>
 				<td>
 					<input className={this.props.id + ' input useritem blocked'} type="email"  disabled ref={(input) => this.email = input } placeholder="New e-mail" />
-					<label className="type" htmlFor={this.props.id}>{this.props.email}</label>
+					<label className="type" htmlFor={this.props.id}>{decodeURIComponent(this.props.email)}</label>
 				</td>
 				<td>
                     <input className={this.props.id + ' input useritem blocked'} type="number" pattern="\d*" maxLength="11"  disabled ref={(input) => this.cpf = input } placeholder="New CPF" />
-                    <label className="type" htmlFor={this.props.id}>{this.props.cpf}</label>
+                    <label className="type cpf"  htmlFor={this.props.id}>{decodeURIComponent(this.props.cpf)}</label>
                 </td>
 				<td>
                     <input className={this.props.id + ' input useritem blocked'} type="text" disabled ref={(input) => this.gender = input }  placeholder="New gender" />
-                    <label className="type" htmlFor={this.props.id}>{this.props.gender}</label>
+                    <label className="type" htmlFor={this.props.id}>{decodeURIComponent(this.props.gender)}</label>
                 </td>
 				<td>
                     <input className={this.props.id + ' input useritem blocked'} type="tel" disabled ref={(input) => this.telephone = input } placeholder="Novo telephone" />
-                    <label className="type" htmlFor={this.props.id}>{this.props.telephone}</label>
+                    <label className="type" htmlFor={this.props.id}>{decodeURIComponent(this.props.telephone)}</label>
                 </td>
 				<td>
                     <input className={this.props.id + ' input useritem blocked'} type="url" disabled pattern="https?://.+" title="Include http://" ref={(input) => this.website = input }  placeholder="Novo website" />
-                    <label className="type" htmlFor={this.props.id}>{this.props.website}</label>
+                    <label className="type" htmlFor={this.props.id}>{decodeURIComponent(this.props.website)}</label>
                 </td>
 				<td>
-                    <button className="form address" data-id={this.props.id} onClick={this.props.openModalAdress}>See Address</button>
+                    <button className="form address" data-id={this.props.id} onClick={this.props.openModalAdress}>See/Edit</button>
                 </td>
 				<td>
                     <button className="form" data-id={this.props.id} onClickCapture={(e) => this.openEdit(e)}>Edit</button>
-                    <button className="form close-edit" data-id={this.props.id} type="submit" onClickCapture={(e) => this.closeEdit(e)}>OK</button>
+                    <button className="form close-edit ok" data-id={this.props.id} type="submit" onClickCapture={(e) => this.closeEdit(e)}>OK</button>
                 </td>
 			</tr>
 		)

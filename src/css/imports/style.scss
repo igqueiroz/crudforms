@@ -27,6 +27,10 @@ h1, h2, h3, h4, h5 {
 	box-shadow: 0 6px 12px rgba(0,0,0,.175) !important;
 }
 
+.ok {
+	background-color: $redColor;
+}
+
 section, header, footer {
 	margin: 0 auto;
 	text-align: center;

@@ -61,9 +61,10 @@ export default class Users extends Component {
                             <label htmlFor="empresa" className="type-register locate">Empresa</label>
                         </div>
 					</div>
-					<div className="row">
-						<h1>Users</h1>
-						<form id="form-contato">
+					<form id="form-contato" className="pessoa_juridica">
+						<div className="row">
+							<h1>Users</h1>
+						
 							<Table responsive striped condensed hover>
 							<thead>
 							    <tr>
@@ -78,7 +79,6 @@ export default class Users extends Component {
 							    </tr>
 							</thead>
 							<tbody>
-
 							{
 								this.state.users.map(users =>  
 								<UsersItem
@@ -94,8 +94,45 @@ export default class Users extends Component {
 		                	}
 							</tbody>
 							</Table>
-						</form>
-						<Modal show={this.state.modal} onHide={this.handleClose}>
+						</div>
+					</form>
+					<form id="form-contato" className="pessoa_fisica">
+						<div className="row">
+							<h1>Users</h1>
+						
+							<Table responsive striped condensed hover>
+							<thead>
+							    <tr>
+							      <th>Name</th>
+							      <th>Email</th>
+							      <th>CPF</th>
+							      <th>Gender</th>
+							      <th>Telephone</th>
+							      <th>Website</th>
+							      <th>Address</th>
+							      <th>Edit</th>
+							    </tr>
+							</thead>
+							<tbody>
+							{
+								this.state.users.map(users =>  
+								<UsersItem
+									key={users.id}
+									id={users.id}
+									name={users.userInfo.name}
+									email={users.userInfo.email}
+									cpf={users.userInfo.cpf}
+									gender={this.genderType(users.userInfo.gender)}
+									telephone={users.userInfo.telephone}
+									website={users.userInfo.website}
+								/>)
+		                	}
+							</tbody>
+							</Table>
+						</div>
+					</form>
+				</div>
+				<Modal show={this.state.modal} onHide={this.handleClose}>
 							<Modal.Header closeButton>
 								<Modal.Title>Modal heading</Modal.Title>
 							</Modal.Header>
@@ -106,8 +143,6 @@ export default class Users extends Component {
 								<Button onClick={this.handleClose}>Close</Button>
 							</Modal.Footer>
 						</Modal>
-					</div>
-				</div>
 			</section>
 		)
 	}
