@@ -7,12 +7,12 @@ export default class UsersItem extends Component {
 	constructor(props) {
         super(props);
         this.state = {
-            msg: '',
-            address: this.props.adress
+            msg: ''
         };
         this.openEdit = this.openEdit.bind(this);
         this.closeEdit = this.closeEdit.bind(this);
         this.deleteUser = this.deleteUser.bind(this);
+        this.updateRegister = this.updateRegister.bind(this);
     }
 
     openEdit(e) {

@@ -22,6 +22,9 @@ export default class Users extends Component {
 	
     handleType(event) {
  		const inputId = event.target.value;
+ 		if( inputId === 'pessoa_fisica') {
+ 			document.querySelector('.' + inputId).classList('')
+ 		}
         this.setState({selectionType: event.target.value}, () => this.props.routes[0].store.dispatch(DataApi.list(this.state.selectionType)));
         
 	}
@@ -86,11 +89,13 @@ export default class Users extends Component {
 									id={users.id}
 									name={users.userInfo.name}
 									email={users.userInfo.email}
-									cpf={users.userInfo.cpf}
+									cnpj={users.userInfo.cnpj}
 									gender={this.genderType(users.userInfo.gender)}
 									telephone={users.userInfo.telephone}
 									website={users.userInfo.website}
+									msg={this.state.msg}
 									address={users.address}
+									selectionType={this.state.selectionType}
 								/>)
 		                	}
 							</tbody>
@@ -106,7 +111,7 @@ export default class Users extends Component {
 							    <tr>
 							      <th>Name</th>
 							      <th>Email</th>
-							      <th>CPF</th>
+							      <th>CNPJ</th>
 							      <th width="23px">Gender</th>
 							      <th>Telephone</th>
 							      <th>Website</th>
@@ -123,12 +128,12 @@ export default class Users extends Component {
 									name={users.userInfo.name}
 									email={users.userInfo.email}
 									cpf={users.userInfo.cpf}
-									gender={this.genderType(users.userInfo.gender)}
 									telephone={users.userInfo.telephone}
 									website={users.userInfo.website}
 									store={this.props.routes[0].store}
 									selectionType={this.state.selectionType}
 									msg={this.state.msg}
+									address={users.address}
 								/>)
 		                	}
 							</tbody>
