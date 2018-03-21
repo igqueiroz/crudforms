@@ -5,7 +5,6 @@ import { Table } from 'react-bootstrap';
 import { Link } from 'react-router';
 import DataApi  from '../logic/DataApi';
 import UsersItem from './UsersItem';
-import base64 from 'base-64'
 import { Modal, OverlayTrigger, Button  } from 'react-bootstrap';
 
 export default class Users extends Component {
@@ -80,7 +79,8 @@ export default class Users extends Component {
 							</thead>
 							<tbody>
 							{
-								this.state.users.map(users =>  
+
+								this.state.users.map(users => 
 								<UsersItem
 									key={users.id}
 									id={users.id}
@@ -90,6 +90,7 @@ export default class Users extends Component {
 									gender={this.genderType(users.userInfo.gender)}
 									telephone={users.userInfo.telephone}
 									website={users.userInfo.website}
+									address={users.address}
 								/>)
 		                	}
 							</tbody>
@@ -106,7 +107,7 @@ export default class Users extends Component {
 							      <th>Name</th>
 							      <th>Email</th>
 							      <th>CPF</th>
-							      <th>Gender</th>
+							      <th width="23px">Gender</th>
 							      <th>Telephone</th>
 							      <th>Website</th>
 							      <th>Address</th>
@@ -125,6 +126,9 @@ export default class Users extends Component {
 									gender={this.genderType(users.userInfo.gender)}
 									telephone={users.userInfo.telephone}
 									website={users.userInfo.website}
+									store={this.props.routes[0].store}
+									selectionType={this.state.selectionType}
+									msg={this.state.msg}
 								/>)
 		                	}
 							</tbody>

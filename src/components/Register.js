@@ -39,7 +39,12 @@ export class Register extends Component {
 
     //puxa o form inteiro e coloca em uma string com encodeURI
     serialize(form) {
-        if(!form||form.nodeName!=="FORM"){return }var i,j,q=[];for(i=form.elements.length-1;i>=0;i=i-1){if(form.elements[i].name===""){continue}switch(form.elements[i].nodeName){case"INPUT":switch(form.elements[i].type){case"text":case"tel":case"number":case"url":case"email":case"hidden":case"password":case"button":case"reset":case"submit":q.push(form.elements[i].name+"="+encodeURIComponent(form.elements[i].value));break;case"checkbox":case"radio":if(form.elements[i].checked){q.push(form.elements[i].name+"="+encodeURIComponent(form.elements[i].value))}break;case"file":break}break;case"TEXTAREA":q.push(form.elements[i].name+"="+encodeURIComponent(form.elements[i].value));break;case"SELECT":switch(form.elements[i].type){case"select-one":q.push(form.elements[i].name+"="+encodeURIComponent(form.elements[i].value));break;case"select-multiple":for(j=form.elements[i].options.length-1;j>=0;j=j-1){if(form.elements[i].options[j].selected){q.push(form.elements[i].name+"="+encodeURIComponent(form.elements[i].options[j].value))}}break}break;case"BUTTON":switch(form.elements[i].type){case"reset":case"submit":case"button":q.push(form.elements[i].name+"="+encodeURIComponent(form.elements[i].value));break}break}}return q.join("&")
+        if(!form||form.nodeName!=="FORM"){return }
+            let i,j,q=[];for(i=form.elements.length-1;i>=0;i=i-1){
+                if(form.elements[i].name===""){continue}
+                    switch(form.elements[i].nodeName){
+                        case"INPUT":switch(form.elements[i].type){
+                            case"text":case"tel":case"number":case"url":case"email":case"hidden":case"password":case"button":case"reset":case"submit":q.push(form.elements[i].name+"="+encodeURIComponent(form.elements[i].value));break;case"checkbox":case"radio":if(form.elements[i].checked){q.push(form.elements[i].name+"="+encodeURIComponent(form.elements[i].value))}break;case"file":break}break;case"TEXTAREA":q.push(form.elements[i].name+"="+encodeURIComponent(form.elements[i].value));break;case"SELECT":switch(form.elements[i].type){case"select-one":q.push(form.elements[i].name+"="+encodeURIComponent(form.elements[i].value));break;case"select-multiple":for(j=form.elements[i].options.length-1;j>=0;j=j-1){if(form.elements[i].options[j].selected){q.push(form.elements[i].name+"="+encodeURIComponent(form.elements[i].options[j].value))}}break}break;case"BUTTON":switch(form.elements[i].type){case"reset":case"submit":case"button":q.push(form.elements[i].name+"="+encodeURIComponent(form.elements[i].value));break}break}}return q.join("&")
     }
     // realiza as interações com os 2 inputs de nome e password e envio ao estado do componente
     handleChange (event) {
@@ -71,7 +76,7 @@ export class Register extends Component {
     handleType(event) {
         const inputId = event.target.value;
         this.setState({selectionType: event.target.value});
-         if(inputId === 'pessoa_fisica') {
+        if(inputId === 'pessoa_fisica') {
                 document.querySelector('.pessoa_fisica').classList.add("show-type");
                 document.querySelector('.pessoa_juridica').classList.add("hide-type");
                 document.querySelector('.pessoa_juridica').classList.remove("show-type");

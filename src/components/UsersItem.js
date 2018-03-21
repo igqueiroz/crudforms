@@ -1,20 +1,18 @@
 // Considerando o endereço uma informação secundária do cadastro, ele está disponível através de um 'model' na lista
 
 import React, { Component } from 'react';
-import base64 from 'base-64';
-import Users from './Users';
+import DataApi from '../logic/DataApi'
 
 export default class UsersItem extends Component {
 	constructor(props) {
         super(props);
         this.state = {
-            users: [],
-            selectionType: '',
-            username: 'igor@igorqueiroz.com.br',
-            password: 'paguemob879'
+            msg: '',
+            address: this.props.adress
         };
         this.openEdit = this.openEdit.bind(this);
         this.closeEdit = this.closeEdit.bind(this);
+        this.deleteUser = this.deleteUser.bind(this);
     }
 
     openEdit(e) {
@@ -27,6 +25,12 @@ export default class UsersItem extends Component {
     		input.disabled = false;
     		input.classList.remove('blocked');
     	})
+        
+    }
+
+    deleteUser(e) {
+        let editId = (e.currentTarget.classList[0]);
+        this.props.store.dispatch(DataApi.delete(editId,this.props.selectionType));
     }
 
     closeEdit(e) {
@@ -54,59 +58,17 @@ export default class UsersItem extends Component {
     }
 
     updateRegister(editId, newValues) {
-        //document.querySelector('.locate').className = 'locate progress';
-        const headers = new Headers();
-        headers.append('Content-Type', 'application/json');
-        headers.append('Authorization', 'Basic ' + base64.encode(this.state.username  + ':' + this.state.password));
-        newValues[3] = (newValues[3] = 'Male') ? "m" : "f";
-        console.log(newValues)
-        const requestData = {
-          method: 'PUT',
-          body: JSON.stringify({
-            "userInfo": {
-                "website": newValues[5], 
-                "cnpj": "43565786790368", 
-                "name": newValues[0], 
-                "gender": newValues[3],
-                "telephone": newValues[4], 
-                "cpf": newValues[2], 
-                "email": newValues[1]
-              }, 
-              "address": {
-                "city": "S\u00e3o Paulo", 
-                "neighborhood": "Vila S\u00f4nia", 
-                "zip": "056340150", 
-                "country": "Brazi", 
-                "complement": "teste", 
-                "state": "SP", 
-                "streetNumber": 79, 
-                "streetName": "Rua Karlina Reiman Wandabeg"
-              }
-          }),
-          headers: headers
-        }
-        fetch(`https://paguemob-interview-environment.firebaseapp.com/contacts/` + editId, requestData)
-            .then(response => {
-                if(response.ok) {
-                    //document.querySelector('.locate').className = 'locate';
-                    Users.loadTypeofRegister('pessoa_fisica')
-                }
-                else {
-                    throw new Error("Não rolou comunicação com a API");
-                }
-            })
-            .then(list => {
-                this.setState({users: list})
-                
-            })
+        console.log(this.state.address)
+        this.props.store.dispatch(DataApi.update(this.props.selectionType, editId, newValues, this.props.address));     
     }
 
     render(){
         return (
-        	<tr>
+        	<tr className={this.props.id}>
     			<td>
     				<input className={this.props.id + ' input useritem blocked'} type="text" disabled ref={(input) => this.name = input } placeholder="New name" />
     				<label className="type" htmlFor={this.props.id}>{decodeURIComponent(this.props.name)}</label>
+                    
     			</td>
 				<td>
 					<input className={this.props.id + ' input useritem blocked'} type="email"  disabled ref={(input) => this.email = input } placeholder="New e-mail" />
@@ -134,6 +96,7 @@ export default class UsersItem extends Component {
 				<td>
                     <button className="form" data-id={this.props.id} onClickCapture={(e) => this.openEdit(e)}>Edit</button>
                     <button className="form close-edit ok" data-id={this.props.id} type="submit" onClickCapture={(e) => this.closeEdit(e)}>OK</button>
+                    <img src="./images/delete.png" alt="remove user" onClick={this.deleteUser} className={this.props.id + ' delete'} />
                 </td>
 			</tr>
 		)

@@ -35,6 +35,22 @@ h1, h2, h3, h4, h5 {
 .ok {
   background-color: #d62a33; }
 
+.delete {
+  width: 28px;
+  position: absolute;
+  top: 7px;
+  left: -112px;
+  z-index: 2;
+  cursor: pointer; }
+
+.imgblock {
+  width: 28px;
+  position: absolute;
+  top: 10px;
+  left: 3px;
+  z-index: 2;
+  display: block; }
+
 section, header, footer {
   margin: 0 auto;
   text-align: center; }

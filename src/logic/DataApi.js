@@ -149,7 +149,7 @@ export default class DataApi {
     }
 
     // Lista os dados recebidos do Firebase
-    static list(typeOfRegister, listUrl){
+    static list(typeOfRegister, list){
       return dispatch => {
         const headers = new Headers();
             headers.append('Content-Type', 'application/json');
@@ -170,36 +170,161 @@ export default class DataApi {
                 .then(usersNewData => {
                     if(typeOfRegister === 'pessoa_fisica') {
                         let users = []
+                        let remove = []
                         users = usersNewData;
-                        console.log(users)
                         users.forEach( (element,index) => {
                           if(element.userInfo.cpf === "00000000000") {
-                            users.splice(index, 1);
+                            remove.push(index)
                           }
-
                         })
-                        console.log(users)
+                        users = users.filter(function(value, index) {
+                          return remove.indexOf(index) === -1;
+                        })
                         dispatch({type:'LISTDATA', users});
                         document.querySelector('.pessoa_fisica').classList.add("show-type");
                         document.querySelector('.pessoa_juridica').classList.remove("show-type");
                     } else {
-                      // usersNewData.forEach( (element,index) => {
-                      //     if(element.userInfo.cnpj === "00000000000000") {
-                      //       console.log(index)
-                      //       users.splice(index, 1);
-                      //    }
-                      //  })
-                      //  dispatch({type:'LISTDATA', users});
-                      //  document.querySelector('.pessoa_juridica').classList.add("show-type");
-                      //  document.querySelector('.pessoa_fisica').classList.remove("hide-type");
+                        let users = []
+                        let remove = []
+                        users = usersNewData;
+                        users.forEach( (element,index) => {
+                          if(element.userInfo.cnpj === "00000000000000") {
+                            remove.push(index)
+                          }
+                        })
+                        users = users.filter(function(value, index) {
+                          return remove.indexOf(index) === -1;
+                        })
+                        dispatch({type:'LISTDATA', users});
+                        document.querySelector('.pessoa_fisica').classList.add("show-type");
+                        document.querySelector('.pessoa_juridica').classList.remove("show-type");
                       }
-                    //envia a requisição para o reducer do Redux e realiza a ação desejada
-                    // O "listing" do reducer deve retornar a função manipulada para devolver um Array ao nosso componente
-                    
                 })
+                .catch(error => {
+                dispatch({type:'NOTIFY', error});
+                setTimeout(() => {
+                    const clear = '';
+                    dispatch({type:'NOTIFY', clear});
+                },  5000);
+            }) 
+      }
+    }
+    static delete(userId, typeOfRegister){
+      return dispatch => {
+        const headers = new Headers();
+            headers.append('Content-Type', 'application/json');
+            headers.append('Authorization', 'Basic ' + localStorage.getItem('auth-token'));
+            const requestData = {          
+              method: 'DELETE',
+              body: '',
+              headers: headers
+            }
+            fetch(`https://paguemob-interview-environment.firebaseapp.com/contacts/` + userId, requestData)
+                .then(response => {
+                    if(response.ok) {
+                      this.list(typeOfRegister);
+                      const clear = 'Usuário apagado com sucesso.';
+                      dispatch({type:'SUCCESS', clear});
+                      setTimeout(() => {
+                          const clear = '';
+                          dispatch({type:'SUCCESS', clear});
+                      }, 3000);
+                    }
+                    else {
+                        throw new Error("Erro de comunicação com o Firebase, tente novamente mais tarde.");
+                    }
+                })
+                .catch(error => {
+                dispatch({type:'NOTIFY', error});
+                setTimeout(() => {
+                    const clear = '';
+                    dispatch({type:'NOTIFY', clear});
+                },  5000);
+            }) 
 
       }
 
+    }
+    static update(selectionType, editId, newValues, oldValues) {
+      return dispatch => {
+        const headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        headers.append('Authorization', 'Basic ' + localStorage.getItem('auth-token'));
+        console.log(selectionType)
+        console.log(editId)
+        console.log(newValues)
+        console.log(oldValues)
+        newValues[3] = (newValues[3] === 'Male') ? "m" : "f";
+        const requestDataPessoaFisica = {
+          method: 'PUT',
+          body: JSON.stringify({
+            "userInfo": {
+                "website": newValues[5], 
+                "cnpj": "00000000000000", 
+                "name": newValues[0], 
+                "gender": newValues[3],
+                "telephone": newValues[4], 
+                "cpf": newValues[2], 
+                "email": newValues[1]
+              }, 
+              "address": {
+                "city": "S\u00e3o Paulo", 
+                "neighborhood": "Vila S\u00f4nia", 
+                "zip": "056340150", 
+                "country": "Brazi", 
+                "complement": "teste", 
+                "state": "SP", 
+                "streetNumber": 79, 
+                "streetName": "Rua Karlina Reiman Wandabeg"
+              }
+          }),
+          headers: headers
+        }
+        const requestDataPessoaJuridica = {
+          method: 'PUT',
+          body: JSON.stringify({
+            "userInfo": {
+                "website": newValues[5], 
+                "cnpj": newValues[2], 
+                "name": newValues[0], 
+                "gender": newValues[3],
+                "telephone": newValues[4], 
+                "cpf": "00000000000", 
+                "email": newValues[1]
+              }, 
+              "address": {
+                "city": "S\u00e3o Paulo", 
+                "neighborhood": "Vila S\u00f4nia", 
+                "zip": "056340150", 
+                "country": "Brazi", 
+                "complement": "teste", 
+                "state": "SP", 
+                "streetNumber": 79, 
+                "streetName": "Rua Karlina Reiman Wandabeg"
+              }
+          }),
+          headers: headers
+        }
+        const requestData = selectionType === "pessoa_fisica" ? requestDataPessoaFisica : requestDataPessoaJuridica;
+        fetch(`https://paguemob-interview-environment.firebaseapp.com/contacts/` + editId, requestData)
+            .then(response => {
+                if(response.ok) {
+                  const clear = 'O usuário foi atualizado.';
+                  dispatch({type:'SUCCESS', clear});
+                  setTimeout(() => {
+                    const clear = '';
+                    dispatch({type:'NOTIFY', clear});
+                  },  5000);
+                }
+                else {
+                    throw new Error("Erro de comunicação com o Firebase, tente novamente mais tarde.");
+                }
+            })
+            .then(list => {
+                this.setState({users: list})
+                
+            })
+      }
     }
 }
 
