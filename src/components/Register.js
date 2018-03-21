@@ -58,10 +58,14 @@ export class Register extends Component {
     handleSubmit(event) {
         event.preventDefault();
         event.target.querySelector('.locate').className = 'locate progress';
-        const typeOfUser = ''
-        const NewUserData = this.serialize(event.target).split('&');
-        console.log(NewUserData)
-        this.props.routes[0].store.dispatch(DataApi.register(this.state.selectionType, NewUserData));
+        let newUserData = this.serialize(event.target).split('&');
+        let dataArray = [];
+        let dataSplit = [];
+        newUserData.forEach((e) => {
+            dataSplit = e.split('=');
+            dataArray.push(dataSplit[1])
+        })
+        this.props.routes[0].store.dispatch(DataApi.register(this.state.selectionType, dataArray));
     }
 
     handleType(event) {
@@ -78,6 +82,12 @@ export class Register extends Component {
         }       
     }
 
+     componentDidMount() {
+        this.props.routes[0].store.subscribe(() => {
+            // notify é o espaço armazenado na store criado da função de seu reducer
+            this.setState({msg: this.props.routes[0].store.getState().notify})
+         })
+    }
    
     renderAutoComplete() {
         const { google } = this.props;
@@ -133,7 +143,7 @@ export class Register extends Component {
                     <div className="row">
                         <div className="logo"><img src="images/mysitelogo@400x-100.png" alt="CRUD Forms" title="CRUD Forms" /></div>
                         <h4>Cadastro de novo usuário:</h4>
-                        <span>{this.state.msg}</span>
+                        <span className="alert">{this.state.msg}</span>
                         <div className="row">
                             <h1>Selecione o tipo de cadastro:</h1>
                             <input type="radio" id="pessoa_fisica"  name="type" value="pessoa_fisica" onChange={this.handleType} />
@@ -217,11 +227,11 @@ export class Register extends Component {
 
                                 <div className="row top-buffer">
                                  
-                                    <div className="col-xs-10 extras">
-                                        <input required name="route" id="route" type="text" className="input" ref="route" placeholder="Rua/ Av." autoComplete="new-password" value={this.state.route}    />
+                                    <div className="col-xs-9 extras">
+                                        <input required name="route" id="route" type="text" className="input" ref="route" placeholder="Rua/ Av." autoComplete="new-password" value={this.state.route}  onChange={this.handleChange}    />
                                         <label htmlFor="street">Street</label>
                                     </div>
-                                    <div className="col-xs-2 extras">
+                                    <div className="col-xs-3 extras">
                                         <input required name="street_number" id="street_number" type="number" className="input" placeholder="XX" ref="street_number" autoComplete="new-password" value={this.state.street_number} onChange={this.handleChange}   />
                                         <label htmlFor="txtFullname">Number</label>
                                     </div>
@@ -340,11 +350,11 @@ export class Register extends Component {
 
                                 <div className="row top-buffer">
                                  
-                                    <div className="col-xs-10 extras">
+                                    <div className="col-xs-9 extras">
                                         <input required name="route2" id="route2" type="text" className="input" placeholder="Rua/ Av." ref="route2" autoComplete="new-password" value={this.state.route2}  onChange={this.handleChange}   />
                                         <label htmlFor="street">Street</label>
                                     </div>
-                                    <div className="col-xs-2 extras">
+                                    <div className="col-xs-3 extras">
                                         <input required name="street_number2" id="street_number2" type="number" className="input" placeholder="XX" ref="street_number2" autoComplete="new-password" value={this.state.street_number2} onChange={this.handleChange}   />
                                         <label htmlFor="txtFullname">Number</label>
                                     </div>
@@ -396,7 +406,7 @@ export class Register extends Component {
                             <div className="col-xs-12 top-buffer">
                                 <div className="col-xs-4 extras" />
                                     <div className="col-xs-4 extras">
-                                        <button className="locate" type="Submit"> OK </button>
+                                        <button className="locate locate2" type="Submit"> OK </button>
                                     </div>
                                 <div className="col-xs-4 extras" />
                             </div>

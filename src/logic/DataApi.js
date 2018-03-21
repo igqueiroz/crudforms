@@ -43,50 +43,101 @@ export default class DataApi {
       }
     }
 
-    static register(typeOfUser, NewUserData) {
+    static register(selectionType, NewUserData) {
       return dispatch => {
+        console.log(selectionType)
+        console.log(NewUserData)
         const headers = new Headers();
         headers.append('Content-Type', 'application/json');
         headers.append('Authorization', 'Basic ' + localStorage.getItem('auth-token'));
-         NewUserData[3] = (NewUserData[3] = 'Male') ? "m" : "f";
-        const requestData = {
-          method: 'GET',
+        const requestDataPessoaFisica =  {
+          method: 'POST',
           body: JSON.stringify({
               "userInfo": {
-                "website": NewUserData[0], 
-                "cnpj": "43565786790368", 
-                "name": "William Oliveira", 
-                "gender": "f", 
-                "telephone": "129873499574", 
-                "cpf": "22504323840", 
-                "email": "anapaula@gmail.com"
+                "website": NewUserData[9],
+                "cnpj": "00000000000000",
+                "name": NewUserData[14],
+                "gender": NewUserData[11],
+                "telephone": NewUserData[10],
+                "cpf": NewUserData[12],
+                "email": NewUserData[13]
               }, 
               "address": {
-                "city": "S\u00e3o Paulo", 
-                "neighborhood": "Vila S\u00f4nia", 
-                "zip": "056340150", 
-                "country": "Brazi", 
-                "complement": "teste", 
-                "state": "SP", 
-                "streetNumber": 79, 
-                "streetName": "Rua Karlina Reiman Wandabeg"
+                "city": NewUserData[3],
+                "neighborhood": NewUserData[5],
+                "zip": NewUserData[1],
+                "country": NewUserData[0],
+                "complement": NewUserData[4],
+                "state": NewUserData[2],
+                "streetNumber": parseInt(NewUserData[6]),
+                "streetName": NewUserData[7]
               }
           }),
           headers: headers
         }
+        const requestDataPessoaJuridica =  {
+          method: 'POST',
+          body: JSON.stringify({
+              "userInfo": {
+                "website": NewUserData[9],
+                "cnpj": NewUserData[11],
+                "name": NewUserData[13],
+                "gender": "m",
+                "telephone": NewUserData[10],
+                "cpf": "00000000000",
+                "email": NewUserData[12]
+              }, 
+              "address": {
+                "city": NewUserData[3],
+                "neighborhood": NewUserData[5],
+                "zip": NewUserData[1],
+                "country": NewUserData[0],
+                "complement": NewUserData[4],
+                "state": NewUserData[2],
+                "streetNumber": parseInt(NewUserData[6]),
+                "streetName": NewUserData[7]
+              }
+          }),
+          headers: headers
+        }
+        const requestData = selectionType === "pessoa_fisica" ? requestDataPessoaFisica : requestDataPessoaJuridica;
         fetch(`https://paguemob-interview-environment.firebaseapp.com/contacts`, requestData)
             .then(response => {
                 if(response.ok) {
-                    document.querySelector('.locate').className = 'locate';
-                   return response.json()
+                  document.querySelector('.progress').className = 'locate';
+                  const clear = 'Seu novo usuário foi criado.';
+                  dispatch({type:'SUCCESS', clear});
+                  // Limpa o formulário após a inserção do usuário
+                  if (selectionType ==="pessoa_fisica") {
+                    document.querySelector('.pessoa_fisica').reset();
+                    document.querySelector('#route').value = "";
+                    document.querySelector('#street_number').value = "";
+                    document.querySelector('#sublocality_level_1').value = "";
+                    document.querySelector('#administrative_area_level_2').value = "";
+                    document.querySelector('#administrative_area_level_1').value = "";
+                    document.querySelector('#postal_code').value = "";
+                    document.querySelector('#country').value = "";
+                  } else {
+                    document.querySelector('.pessoa_juridica').reset();
+                    document.querySelector('#route2').value = "";
+                    document.querySelector('#street_number2').value = "";
+                    document.querySelector('#sublocality_level_12').value = "";
+                    document.querySelector('#administrative_area_level_22').value = "";
+                    document.querySelector('#administrative_area_level_12').value = "";
+                    document.querySelector('#postal_code2').value = "";
+                    document.querySelector('#country2').value = "";
+                  }
+                  
+                  setTimeout(() => {
+                    const clear = '';
+                    dispatch({type:'SUCCESS', clear});
+                },  8000);
+
                 }
                 else {
                     throw new Error("Falha na comunicação com o Firebase, tente novamente mais tarde.");
+                    document.querySelector('.progress').className = 'locate';
                 }
-            })
-            .then(list => {
-                let msg = 'Novo ID criado: ' + list;
-                dispatch({type:'NOTIFY', msg});
             })
             .catch(error => {
                 dispatch({type:'NOTIFY', error});
@@ -98,32 +149,37 @@ export default class DataApi {
       }
     }
 
-    // Lista os dados recebidos e guardados na API do banco MongoDB
-    static list(listUrl){
-      return dispatch => {  
-        const requestInfo = {
-          method: 'GET',
-          mode: 'cors'
-        };
-        //recebe os dados consumíveis da API criada, o servidor já está no modo Cross-Origin
-        fetch(listUrl, requestInfo)
-            .then(response => {
-                if(response.ok) {
-                    return response.json()
-                }
-                else {
-                    throw new Error("Não rolou comunicação com a API");
-                }
-            })
-            .then(list => {
-              //envia a requisição para o reducer do Redux e realiza a ação desejada
-              // list.users => primeira chave do JSON en http://localhost:3001/userlist
-              const listing = list.users
-              // O "listing" do reducer deve retornar a função manipulada para devolver um Array ao nosso componente
-              dispatch({type:'LISTDATA', listing});
-              return listing;
-          }); 
+    // Lista os dados recebidos do Firebase
+    static list(typeOfRegister, listUrl){
+      return dispatch => {
+        if(typeOfRegister === 'pessoa_fisica') {
+        const headers = new Headers();
+            headers.append('Content-Type', 'application/json');
+            headers.append('Authorization', 'Basic ' + localStorage.getItem('auth-token'));
+            const requestData = {          
+              method: 'GET',
+              headers: headers
+            }
+            fetch(`https://paguemob-interview-environment.firebaseapp.com/contacts`, requestData)
+                .then(response => {
+                    if(response.ok) {
+                        document.querySelector('.locate').className = 'locate';
+                       return response.json()
+                    }
+                    else {
+                        throw new Error("Não rolou comunicação com a API");
+                    }
+                })
+                .then(users => {
+                    console.log(users)
+                    //envia a requisição para o reducer do Redux e realiza a ação desejada
+                    // O "listing" do reducer deve retornar a função manipulada para devolver um Array ao nosso componente
+                    dispatch({type:'LISTDATA', users});
+                    
+                }) 
+      } else {
 
+        }
       }
 
     }

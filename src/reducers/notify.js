@@ -10,5 +10,13 @@ export function notify(state='', action){
   	}
     
   }
+  if(action.type === 'SUCCESS'){
+  	if(action) {
+  		return action.clear;
+  	} else{
+  		return null
+  	}
+    
+  }
    return state;
 } 

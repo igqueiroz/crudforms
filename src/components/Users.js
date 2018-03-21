@@ -14,20 +14,17 @@ export default class Users extends Component {
         this.state = {
             users: [],
             selectionType: '',
-            username: 'igor@igorqueiroz.com.br',
-            password: 'paguemob879',
             modal: false
         };
-        this.handleChange = this.handleChange.bind(this);
-        this.loadTypeofRegister = this.loadTypeofRegister.bind(this);
+        this.handleType = this.handleType.bind(this);
         this.genderType = this.genderType.bind(this);
     }
 
 	
-    handleChange(event) {
+    handleType(event) {
  		const inputId = event.target.value;
-        this.setState({selectionType: event.target.value});
-        this.loadTypeofRegister(event.target.value);
+        this.setState({selectionType: event.target.value}, () => this.props.routes[0].store.dispatch(DataApi.list(this.state.selectionType)));
+        
 	}
 	genderType(gender) {
 		if (gender == 'm') {
@@ -37,39 +34,14 @@ export default class Users extends Component {
 		}
 	}
 	
-
-	loadTypeofRegister(typeOfRegister) {
-			//document.querySelector('.locate').className = 'locate progress';
-			if(typeOfRegister === 'pessoa_fisica') {
-				const headers = new Headers();
-		        headers.append('Content-Type', 'application/json');
-		        headers.append('Authorization', 'Basic ' + base64.encode(this.state.username  + ':' + this.state.password));
-		        const requestData = {          
-		          method: 'GET',
-		          headers: headers
-		        }
-		        fetch(`https://paguemob-interview-environment.firebaseapp.com/contacts`, requestData)
-		            .then(response => {
-		                if(response.ok) {
-		                    //document.querySelector('.locate').className = 'locate';
-		                   return response.json()
-		                }
-		                else {
-		                    throw new Error("Não rolou comunicação com a API");
-		                }
-		            })
-		            .then(list => {
-		                this.setState({users: list})
-		                
-		            }) 
-			}
-			else {
-
-			}
-
-	        
-	          
-	}
+	
+	componentDidMount() {
+        this.props.routes[0].store.subscribe(() => {
+            // notify é o espaço armazenado na store criado da função de seu reducer
+            this.setState({msg: this.props.routes[0].store.getState().notify})
+            this.setState({users: this.props.routes[0].store.getState().data})
+         })
+    }
 	
 
 	render() {
@@ -81,10 +53,13 @@ export default class Users extends Component {
 				<div className="container">
 					<div className="row">
 						<h1>Selecione o tipo de cadastro:</h1>
-						<label htmlFor="usuario">Pessoa Física</label>
-						<input type="radio" id="usuario" name="type" value="pessoa_fisica" onChange={this.handleChange} />
-						<label htmlFor="empresa">Empresa</label>
-						<input type="radio" id="empresa" name="type" value="empresa" onChange={this.handleChange}  />
+						<span className="alert">{this.state.msg}</span>
+                        <div className="row">
+                            <input type="radio" id="pessoa_fisica" name="type" value="pessoa_fisica" onChange={this.handleType} />
+                            <label htmlFor="pessoa_fisica" className="type-register locate">Pessoa Física</label>
+                            <input type="radio" id="empresa" name="type" value="empresa" onChange={this.handleType} />
+                            <label htmlFor="empresa" className="type-register locate">Empresa</label>
+                        </div>
 					</div>
 					<div className="row">
 						<h1>Users</h1>
