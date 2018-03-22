@@ -3,7 +3,7 @@
 import React, { Component } from 'react';
 import DataApi from '../logic/DataApi'
 
-export default class UsersItem extends Component {
+export default class UsersItemPessoaJuridica extends Component {
 	constructor(props) {
         super(props);
         this.state = {
@@ -29,8 +29,11 @@ export default class UsersItem extends Component {
     }
 
     deleteUser(e) {
-        let editId = (e.currentTarget.classList[0]);
-        this.props.store.dispatch(DataApi.delete(editId,this.props.selectionType));
+        if (confirm("Você tem certeza que deseja remover esse usuário?")) {
+            let editId = (e.currentTarget.classList[0]);
+            this.props.store.dispatch(DataApi.delete(editId,this.props.selectionType))
+            this.props.store.dispatch(DataApi.list('pessoa_juridica'))
+        }
     }
 
     closeEdit(e) {
@@ -58,7 +61,6 @@ export default class UsersItem extends Component {
     }
 
     updateRegister(editId, newValues) {
-        console.log(this.state.address)
         this.props.store.dispatch(DataApi.update(this.props.selectionType, editId, newValues, this.props.address));     
     }
 
@@ -75,13 +77,10 @@ export default class UsersItem extends Component {
 					<label className="type" htmlFor={this.props.id}>{decodeURIComponent(this.props.email)}</label>
 				</td>
 				<td>
-                    <input className={this.props.id + ' input useritem blocked'} type="number" pattern="\d*" maxLength="11"  disabled ref={(input) => this.cpf = input } placeholder="New CPF" />
-                    <label className="type cpf"  htmlFor={this.props.id}>{decodeURIComponent(this.props.cpf)}</label>
+                    <input className={this.props.id + ' input useritem blocked'} type="number" pattern="\d*" maxLength="14"  disabled ref={(input) => this.cpnpj = input } placeholder="New CNPJ" />
+                    <label className="type cnpj"  htmlFor={this.props.id}>{decodeURIComponent(this.props.cnpj)}</label>
                 </td>
-				<td>
-                    <input className={this.props.id + ' input useritem blocked'} type="text" disabled ref={(input) => this.gender = input }  placeholder="New gender" />
-                    <label className="type" htmlFor={this.props.id}>{decodeURIComponent(this.props.gender)}</label>
-                </td>
+				
 				<td>
                     <input className={this.props.id + ' input useritem blocked'} type="tel" disabled ref={(input) => this.telephone = input } placeholder="Novo telephone" />
                     <label className="type" htmlFor={this.props.id}>{decodeURIComponent(this.props.telephone)}</label>

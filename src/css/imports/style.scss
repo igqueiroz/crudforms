@@ -12,7 +12,8 @@ p *, p {
 }
 
 th {
-	text-align: center;
+	text-align: left;
+	padding-left: 11px !important;
 }
 
 body {
@@ -35,7 +36,7 @@ h1, h2, h3, h4, h5 {
 	width: 28px;
     position: absolute;
     top: 7px;
-    left: -112px;
+    left: -121px;
     z-index: 2;
    	cursor: pointer;
 }
@@ -414,7 +415,7 @@ input[type=radio]:checked + .type-register {
 	input.useritem {
 		font-size: 0.9em;
 		border-bottom: 1px dotted $redColor;
-		text-align: center;
+		text-align: left;
 		height: 30px;
 	}
 
@@ -667,7 +668,7 @@ input[type=radio]:checked + .type-register {
 }
 
 #form-contato input.useritem:placeholder-shown:not(:focus) + * {
-	font-size: 99%;
+	font-size: 80%;
     top: 16px;
 }
 

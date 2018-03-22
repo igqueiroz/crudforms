@@ -4,7 +4,8 @@ import React, { Component } from 'react';
 import { Table } from 'react-bootstrap';
 import { Link } from 'react-router';
 import DataApi  from '../logic/DataApi';
-import UsersItem from './UsersItem';
+import UsersItemPessoaJuridica from './UsersItemPessoaJuridica';
+import UsersItemPessoaFisica from './UsersItemPessoaFisica';
 import { Modal, OverlayTrigger, Button  } from 'react-bootstrap';
 
 export default class Users extends Component {
@@ -23,9 +24,21 @@ export default class Users extends Component {
     handleType(event) {
  		const inputId = event.target.value;
  		if( inputId === 'pessoa_fisica') {
- 			document.querySelector('.' + inputId).classList('')
- 		}
-        this.setState({selectionType: event.target.value}, () => this.props.routes[0].store.dispatch(DataApi.list(this.state.selectionType)));
+ 			document.querySelector('.pessoa_fisica').classList.add("show-type");
+            document.querySelector('.pessoa_juridica').classList.remove("show-type");
+            this.props.routes[0].store.dispatch(DataApi.list('pessoa_fisica'));
+            this.setState({selectionType: 'pessoa_fisica'})
+            
+        } else {
+        	document.querySelector('.pessoa_fisica').classList.remove("show-type");
+        	document.querySelector('.pessoa_fisica').classList.remove("hide-type");
+			document.querySelector('.pessoa_juridica').classList.add("show-type");
+			this.props.routes[0].store.dispatch(DataApi.list('pessoa_juridica'));
+			this.setState({selectionType: 'pessoa_juridica'})
+			//debugger;
+		}
+ 		
+        
         
 	}
 	genderType(gender) {
@@ -65,15 +78,14 @@ export default class Users extends Component {
 					</div>
 					<form id="form-contato" className="pessoa_juridica">
 						<div className="row">
-							<h1>Users</h1>
+							<h1>Empresa</h1>
 						
 							<Table responsive striped condensed hover>
 							<thead>
 							    <tr>
 							      <th>Name</th>
 							      <th>Email</th>
-							      <th>CPF</th>
-							      <th>Gender</th>
+							      <th>CNPJ</th>
 							      <th>Telephone</th>
 							      <th>Website</th>
 							      <th>Address</th>
@@ -84,18 +96,18 @@ export default class Users extends Component {
 							{
 
 								this.state.users.map(users => 
-								<UsersItem
+								<UsersItemPessoaJuridica
 									key={users.id}
 									id={users.id}
 									name={users.userInfo.name}
 									email={users.userInfo.email}
 									cnpj={users.userInfo.cnpj}
-									gender={this.genderType(users.userInfo.gender)}
 									telephone={users.userInfo.telephone}
 									website={users.userInfo.website}
 									msg={this.state.msg}
 									address={users.address}
 									selectionType={this.state.selectionType}
+									store={this.props.routes[0].store}
 								/>)
 		                	}
 							</tbody>
@@ -104,14 +116,14 @@ export default class Users extends Component {
 					</form>
 					<form id="form-contato" className="pessoa_fisica">
 						<div className="row">
-							<h1>Users</h1>
+							<h1>Pessoa Física</h1>
 						
 							<Table responsive striped condensed hover>
 							<thead>
 							    <tr>
 							      <th>Name</th>
 							      <th>Email</th>
-							      <th>CNPJ</th>
+							      <th>CPF</th>
 							      <th width="23px">Gender</th>
 							      <th>Telephone</th>
 							      <th>Website</th>
@@ -122,11 +134,12 @@ export default class Users extends Component {
 							<tbody>
 							{
 								this.state.users.map(users =>  
-								<UsersItem
+								<UsersItemPessoaFisica
 									key={users.id}
 									id={users.id}
 									name={users.userInfo.name}
 									email={users.userInfo.email}
+									gender={this.genderType(users.userInfo.gender)}
 									cpf={users.userInfo.cpf}
 									telephone={users.userInfo.telephone}
 									website={users.userInfo.website}

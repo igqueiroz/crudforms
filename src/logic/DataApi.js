@@ -107,31 +107,29 @@ export default class DataApi {
                   document.querySelector('.progress').className = 'locate';
                   const clear = 'Seu novo usuário foi criado.';
                   dispatch({type:'SUCCESS', clear});
-                  // Limpa o formulário após a inserção do usuário
-                  if (selectionType ==="pessoa_fisica") {
-                    document.querySelector('.pessoa_fisica').reset();
-                    document.querySelector('#route').value = "";
-                    document.querySelector('#street_number').value = "";
-                    document.querySelector('#sublocality_level_1').value = "";
-                    document.querySelector('#administrative_area_level_2').value = "";
-                    document.querySelector('#administrative_area_level_1').value = "";
-                    document.querySelector('#postal_code').value = "";
-                    document.querySelector('#country').value = "";
-                  } else {
-                    document.querySelector('.pessoa_juridica').reset();
-                    document.querySelector('#route2').value = "";
-                    document.querySelector('#street_number2').value = "";
-                    document.querySelector('#sublocality_level_12').value = "";
-                    document.querySelector('#administrative_area_level_22').value = "";
-                    document.querySelector('#administrative_area_level_12').value = "";
-                    document.querySelector('#postal_code2').value = "";
-                    document.querySelector('#country2').value = "";
-                  }
                   setTimeout(() => {
                     const clear = '';
                     dispatch({type:'SUCCESS', clear});
-                },  8000);
-
+                     // Limpa o formulário após a inserção do usuário
+                    if (selectionType ==="pessoa_fisica") {
+                      document.querySelector('.pessoa_fisica').reset();
+                      document.querySelector('#route').value = "";
+                      document.querySelector('#street_number').value = "";
+                      document.querySelector('#sublocality_level_1').value = "";
+                      document.querySelector('#administrative_area_level_2').value = "";
+                      document.querySelector('#administrative_area_level_1').value = "";
+                      document.querySelector('#postal_code').value = "";
+                    } else {
+                      document.querySelector('.pessoa_juridica').reset();
+                      document.querySelector('#route2').value = "";
+                      document.querySelector('#street_number2').value = "";
+                      document.querySelector('#sublocality_level_12').value = "";
+                      document.querySelector('#administrative_area_level_22').value = "";
+                      document.querySelector('#administrative_area_level_12').value = "";
+                      document.querySelector('#postal_code2').value = "";
+                      document.querySelector('#country2').value = "";
+                    }
+                  },  3000);
                 }
                 else {
                     throw new Error("Falha na comunicação com o Firebase, tente novamente mais tarde.");
@@ -149,7 +147,7 @@ export default class DataApi {
     }
 
     // Lista os dados recebidos do Firebase
-    static list(typeOfRegister, list){
+    static list(typeOfRegister){
       return dispatch => {
         const headers = new Headers();
             headers.append('Content-Type', 'application/json');
@@ -181,8 +179,6 @@ export default class DataApi {
                           return remove.indexOf(index) === -1;
                         })
                         dispatch({type:'LISTDATA', users});
-                        document.querySelector('.pessoa_fisica').classList.add("show-type");
-                        document.querySelector('.pessoa_juridica').classList.remove("show-type");
                     } else {
                         let users = []
                         let remove = []
@@ -196,8 +192,6 @@ export default class DataApi {
                           return remove.indexOf(index) === -1;
                         })
                         dispatch({type:'LISTDATA', users});
-                        document.querySelector('.pessoa_fisica').classList.add("show-type");
-                        document.querySelector('.pessoa_juridica').classList.remove("show-type");
                       }
                 })
                 .catch(error => {
@@ -223,11 +217,12 @@ export default class DataApi {
                 .then(response => {
                     if(response.ok) {
                       this.list(typeOfRegister);
-                      const clear = 'Usuário apagado com sucesso.';
+                      const clear = 'Usuário removido com sucesso.';
                       dispatch({type:'SUCCESS', clear});
                       setTimeout(() => {
                           const clear = '';
                           dispatch({type:'SUCCESS', clear});
+
                       }, 3000);
                     }
                     else {
@@ -239,7 +234,7 @@ export default class DataApi {
                 setTimeout(() => {
                     const clear = '';
                     dispatch({type:'NOTIFY', clear});
-                },  5000);
+                },  3000);
             }) 
 
       }
@@ -250,32 +245,32 @@ export default class DataApi {
         const headers = new Headers();
         headers.append('Content-Type', 'application/json');
         headers.append('Authorization', 'Basic ' + localStorage.getItem('auth-token'));
-        console.log(selectionType)
-        console.log(editId)
-        console.log(newValues)
-        console.log(oldValues)
+        // console.log(selectionType)
+        // console.log(editId)
+        // console.log(newValues)
+        // console.log(oldValues)
         newValues[3] = (newValues[3] === 'Male') ? "m" : "f";
         const requestDataPessoaFisica = {
           method: 'PUT',
           body: JSON.stringify({
             "userInfo": {
-                "website": newValues[5], 
+                "website": encodeURIComponent(newValues[4]), 
                 "cnpj": "00000000000000", 
-                "name": newValues[0], 
+                "name": encodeURIComponent(newValues[0]), 
                 "gender": newValues[3],
-                "telephone": newValues[4], 
+                "telephone": encodeURIComponent(newValues[9]), 
                 "cpf": newValues[2], 
-                "email": newValues[1]
+                "email":  encodeURIComponent(newValues[1])
               }, 
               "address": {
-                "city": "S\u00e3o Paulo", 
-                "neighborhood": "Vila S\u00f4nia", 
-                "zip": "056340150", 
-                "country": "Brazi", 
-                "complement": "teste", 
-                "state": "SP", 
-                "streetNumber": 79, 
-                "streetName": "Rua Karlina Reiman Wandabeg"
+                "city":  encodeURIComponent(oldValues[0]), 
+                "neighborhood": encodeURIComponent(oldValues[3]), 
+                "zip": encodeURIComponent(oldValues[7]), 
+                "country": encodeURIComponent(oldValues[2]), 
+                "complement": encodeURIComponent(oldValues[1]), 
+                "state": encodeURIComponent(oldValues[4]), 
+                "streetNumber": parseInt(oldValues[6]), 
+                "streetName": encodeURIComponent(oldValues[5])
               }
           }),
           headers: headers
