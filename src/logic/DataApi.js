@@ -45,8 +45,7 @@ export default class DataApi {
 
     static register(selectionType, NewUserData) {
       return dispatch => {
-        console.log(selectionType)
-        console.log(NewUserData)
+       
         const headers = new Headers();
         headers.append('Content-Type', 'application/json');
         headers.append('Authorization', 'Basic ' + localStorage.getItem('auth-token'));
@@ -147,7 +146,7 @@ export default class DataApi {
     }
 
     // Lista os dados recebidos do Firebase
-    static list(typeOfRegister){
+    static list(typeOfRegister,loading){
       return dispatch => {
         const headers = new Headers();
             headers.append('Content-Type', 'application/json');
@@ -179,19 +178,21 @@ export default class DataApi {
                           return remove.indexOf(index) === -1;
                         })
                         dispatch({type:'LISTDATA', users});
+                        if (loading) {loading.classList.remove('progress')}
                     } else {
-                        let users = []
+                        let empresa = []
                         let remove = []
-                        users = usersNewData;
-                        users.forEach( (element,index) => {
+                        empresa = usersNewData;
+                        empresa.forEach( (element,index) => {
                           if(element.userInfo.cnpj === "00000000000000") {
                             remove.push(index)
                           }
                         })
-                        users = users.filter(function(value, index) {
+                        empresa = empresa.filter(function(value, index) {
                           return remove.indexOf(index) === -1;
                         })
-                        dispatch({type:'LISTDATA', users});
+                        dispatch({type:'LISTEMPRESA', empresa});
+                        if (loading) {loading.classList.remove('progress')}
                       }
                 })
                 .catch(error => {
@@ -240,37 +241,37 @@ export default class DataApi {
       }
 
     }
-    static update(selectionType, editId, newValues, oldValues) {
+    static update(selectionType, editId, newValues, oldValues, loading) {
       return dispatch => {
         const headers = new Headers();
         headers.append('Content-Type', 'application/json');
         headers.append('Authorization', 'Basic ' + localStorage.getItem('auth-token'));
-        // console.log(selectionType)
-        // console.log(editId)
-        // console.log(newValues)
-        // console.log(oldValues)
-        newValues[3] = (newValues[3] === 'Male') ? "m" : "f";
+        newValues[3] = selectionType === 'pessoa_fisica' ? (newValues[3] === 'Male') ? "m" : "f" :  newValues[3];
+        console.log(selectionType)
+        console.log(editId)
+        console.log(newValues)
+        console.log(oldValues)
         const requestDataPessoaFisica = {
           method: 'PUT',
           body: JSON.stringify({
             "userInfo": {
-                "website": encodeURIComponent(newValues[4]), 
+                "website": encodeURIComponent(newValues[5]), 
                 "cnpj": "00000000000000", 
                 "name": encodeURIComponent(newValues[0]), 
                 "gender": newValues[3],
-                "telephone": encodeURIComponent(newValues[9]), 
+                "telephone": encodeURIComponent(newValues[4]), 
                 "cpf": newValues[2], 
                 "email":  encodeURIComponent(newValues[1])
               }, 
               "address": {
-                "city":  encodeURIComponent(oldValues[0]), 
-                "neighborhood": encodeURIComponent(oldValues[3]), 
-                "zip": encodeURIComponent(oldValues[7]), 
-                "country": encodeURIComponent(oldValues[2]), 
-                "complement": encodeURIComponent(oldValues[1]), 
-                "state": encodeURIComponent(oldValues[4]), 
-                "streetNumber": parseInt(oldValues[6]), 
-                "streetName": encodeURIComponent(oldValues[5])
+                "city":  encodeURIComponent(oldValues.city), 
+                "neighborhood": encodeURIComponent(oldValues.neighborhood), 
+                "zip": encodeURIComponent(oldValues.zip), 
+                "country": encodeURIComponent(oldValues.country),
+                "complement": encodeURIComponent(oldValues.complement),
+                "state": encodeURIComponent(oldValues.state),
+                "streetNumber": parseInt(oldValues.streetNumber),
+                "streetName": encodeURIComponent(oldValues.streetName)
               }
           }),
           headers: headers
@@ -279,23 +280,23 @@ export default class DataApi {
           method: 'PUT',
           body: JSON.stringify({
             "userInfo": {
-                "website": newValues[5], 
-                "cnpj": newValues[2], 
-                "name": newValues[0], 
-                "gender": newValues[3],
-                "telephone": newValues[4], 
+                "website": encodeURIComponent(newValues[4]), 
+                "cnpj": encodeURIComponent(newValues[2]), 
+                "name": encodeURIComponent(newValues[0]), 
+                "gender": 'm',
+                "telephone": encodeURIComponent(newValues[3]), 
                 "cpf": "00000000000", 
-                "email": newValues[1]
+                "email": encodeURIComponent(newValues[1])
               }, 
               "address": {
-                "city": "S\u00e3o Paulo", 
-                "neighborhood": "Vila S\u00f4nia", 
-                "zip": "056340150", 
-                "country": "Brazi", 
-                "complement": "teste", 
-                "state": "SP", 
-                "streetNumber": 79, 
-                "streetName": "Rua Karlina Reiman Wandabeg"
+                "city": encodeURIComponent(oldValues.city),
+                "neighborhood": encodeURIComponent(oldValues.neighborhood),
+                "zip": encodeURIComponent(oldValues.zip),
+                "country": encodeURIComponent(oldValues.country),
+                "complement": encodeURIComponent(oldValues.complement),
+                "state": encodeURIComponent(oldValues.state),
+                "streetNumber": parseInt(oldValues.streetNumber),
+                "streetName": encodeURIComponent(oldValues.streetName)
               }
           }),
           headers: headers
@@ -304,8 +305,16 @@ export default class DataApi {
         fetch(`https://paguemob-interview-environment.firebaseapp.com/contacts/` + editId, requestData)
             .then(response => {
                 if(response.ok) {
-                  const clear = 'O usuário foi atualizado.';
+                  const clear = 'O usuário foi atualizado com sucesso.';
                   dispatch({type:'SUCCESS', clear});
+                  
+                  if(selectionType === "pessoa_fisica") {
+                    dispatch(DataApi.list('pessoa_fisica',loading));
+                    
+                  }
+                  else {
+                    dispatch(DataApi.list('pessoa_juridica',loading));
+                  }                      
                   setTimeout(() => {
                     const clear = '';
                     dispatch({type:'NOTIFY', clear});
@@ -315,10 +324,20 @@ export default class DataApi {
                     throw new Error("Erro de comunicação com o Firebase, tente novamente mais tarde.");
                 }
             })
-            .then(list => {
-                this.setState({users: list})
-                
-            })
+            .catch(error => {
+                dispatch({type:'NOTIFY', error});
+                setTimeout(() => {
+                    const clear = '';
+                    dispatch({type:'NOTIFY', clear});
+                },  3000);
+            }) 
+           
+      }
+    }
+
+    static openModal(open, newValues, oldValues, loading) {
+      return dispatch => {
+        dispatch({type:'OPENMODAL', open});
       }
     }
 }

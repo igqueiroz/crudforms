@@ -50,9 +50,7 @@ export default class UsersItemPessoaFisica extends Component {
         const newValues = [];
         document.querySelectorAll('input.'+ editId).forEach((input) => {
             if(input.value === '' || input.value === undefined || input.value === null) {
-
                 newValueEdited = input.nextSibling.textContent;
-                console.log(input.nextSibling.textContent)
             }
             else {
                 newValueEdited = input.value;  
@@ -60,13 +58,25 @@ export default class UsersItemPessoaFisica extends Component {
             newValues.push(newValueEdited);
 
         })
-        console.log(newValues);
-        this.updateRegister(editId,newValues);
+        this.updateRegister(editId,newValues,e.currentTarget.previousSibling);
     }
 
-    updateRegister(editId, newValues) {
-        console.log(newValues)
-        this.props.store.dispatch(DataApi.update(this.props.selectionType, editId, newValues, this.props.address));     
+    openModal(e) {
+        e.preventDefault();
+        const editId = e.currentTarget.getAttribute('data-id');
+        this.props.store.dispatch(DataApi.openModal(true,editId))
+    }
+
+    updateRegister(editId, newValues, loading) {
+        loading.classList.add('progress');
+        if (confirm("Você tem certeza que deseja atualizar esse usuário?")) {
+            this.props.store.dispatch(DataApi.update(this.props.selectionType, editId, newValues, this.props.address, loading));
+            document.querySelector('.pessoa_fisica').reset();
+        }
+        else {
+            document.querySelector('.pessoa_fisica').reset();
+            loading.classList.remove('progress');
+        }
     }
                                   
     render(){
@@ -98,7 +108,7 @@ export default class UsersItemPessoaFisica extends Component {
                     <label className="type" htmlFor={this.props.id}>{decodeURIComponent(this.props.website)}</label>
                 </td>
 				<td>
-                    <button className="form address" data-id={this.props.id} onClick={this.props.openModalAdress}>See/Edit</button>
+                    <button className="form address" data-id={this.props.id} onClickCapture={(e) => this.openModal(e)}>See/Edit</button>
                 </td>
 				<td>
                     <button className="form" data-id={this.props.id} onClickCapture={(e) => this.openEdit(e)}>Edit</button>

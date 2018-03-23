@@ -13,33 +13,38 @@ export default class Users extends Component {
         super(props);
         this.state = {
             users: [],
+            empresa: [],
             selectionType: '',
-            modal: false
+            modalId: ''
         };
         this.handleType = this.handleType.bind(this);
         this.genderType = this.genderType.bind(this);
+        this.openModalAddress = this.openModalAddress.bind(this);
+        this.handleClose = this.handleClose.bind(this);
     }
 
 	
     handleType(event) {
  		const inputId = event.target.value;
  		if( inputId === 'pessoa_fisica') {
+ 			event.target.nextSibling.classList.add('progress');
  			document.querySelector('.pessoa_fisica').classList.add("show-type");
             document.querySelector('.pessoa_juridica').classList.remove("show-type");
-            this.props.routes[0].store.dispatch(DataApi.list('pessoa_fisica'));
+            this.props.routes[0].store.dispatch(DataApi.list('pessoa_fisica',event.target.nextSibling))
             this.setState({selectionType: 'pessoa_fisica'})
-            
         } else {
+        	event.target.nextSibling.classList.add('progress');
         	document.querySelector('.pessoa_fisica').classList.remove("show-type");
         	document.querySelector('.pessoa_fisica').classList.remove("hide-type");
 			document.querySelector('.pessoa_juridica').classList.add("show-type");
-			this.props.routes[0].store.dispatch(DataApi.list('pessoa_juridica'));
+			this.props.routes[0].store.dispatch(DataApi.list('pessoa_juridica',event.target.nextSibling));
 			this.setState({selectionType: 'pessoa_juridica'})
 			//debugger;
-		}
- 		
-        
-        
+		} 
+	}
+
+	handleClose() {
+		this.props.routes[0].store.dispatch(DataApi.openModal(false));
 	}
 	genderType(gender) {
 		if (gender == 'm') {
@@ -48,13 +53,19 @@ export default class Users extends Component {
 			return 'Female'
 		}
 	}
-	
+	openModalAddress(e) {
+		console.log('eu')
+		e.preventDefault();
+		this.props.routes[0].store.dispatch(DataApi.openModal(true));
+	}
 	
 	componentDidMount() {
         this.props.routes[0].store.subscribe(() => {
             // notify é o espaço armazenado na store criado da função de seu reducer
             this.setState({msg: this.props.routes[0].store.getState().notify})
             this.setState({users: this.props.routes[0].store.getState().data})
+            this.setState({empresa: this.props.routes[0].store.getState().empresa})
+            this.setState({modal: this.props.routes[0].store.getState().modal})
          })
     }
 	
@@ -95,17 +106,17 @@ export default class Users extends Component {
 							<tbody>
 							{
 
-								this.state.users.map(users => 
+								this.state.empresa.map(empresa => 
 								<UsersItemPessoaJuridica
-									key={users.id}
-									id={users.id}
-									name={users.userInfo.name}
-									email={users.userInfo.email}
-									cnpj={users.userInfo.cnpj}
-									telephone={users.userInfo.telephone}
-									website={users.userInfo.website}
+									key={empresa.id}
+									id={empresa.id}
+									name={empresa.userInfo.name}
+									email={empresa.userInfo.email}
+									cnpj={empresa.userInfo.cnpj}
+									telephone={empresa.userInfo.telephone}
+									website={empresa.userInfo.website}
 									msg={this.state.msg}
-									address={users.address}
+									address={empresa.address}
 									selectionType={this.state.selectionType}
 									store={this.props.routes[0].store}
 								/>)
@@ -133,7 +144,7 @@ export default class Users extends Component {
 							</thead>
 							<tbody>
 							{
-								this.state.users.map(users =>  
+								this.state.users.map(users => 
 								<UsersItemPessoaFisica
 									key={users.id}
 									id={users.id}
@@ -147,6 +158,7 @@ export default class Users extends Component {
 									selectionType={this.state.selectionType}
 									msg={this.state.msg}
 									address={users.address}
+									openModalAdress={this.openModalAdress}
 								/>)
 		                	}
 							</tbody>
@@ -156,7 +168,7 @@ export default class Users extends Component {
 				</div>
 				<Modal show={this.state.modal} onHide={this.handleClose}>
 							<Modal.Header closeButton>
-								<Modal.Title>Modal heading</Modal.Title>
+								<Modal.Title>{this.state.users}</Modal.Title>
 							</Modal.Header>
 							<Modal.Body>
 								<h4>Text in a modal</h4>

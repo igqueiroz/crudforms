@@ -262,6 +262,8 @@ span.alert {
 	padding: 10px 30px;
 	background-color: #ccc;
 	border-radius: 30px;
+	overflow: hidden;
+	margin: 0;
 }
 
 input[type=radio] + .type-register:hover {

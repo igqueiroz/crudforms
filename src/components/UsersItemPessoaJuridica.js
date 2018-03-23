@@ -57,11 +57,19 @@ export default class UsersItemPessoaJuridica extends Component {
             }
             newValues.push(newValueEdited);
         })
-        this.updateRegister(editId,newValues);
+        this.updateRegister(editId,newValues,e.currentTarget.previousSibling);
     }
 
-    updateRegister(editId, newValues) {
-        this.props.store.dispatch(DataApi.update(this.props.selectionType, editId, newValues, this.props.address));     
+     updateRegister(editId, newValues, loading) {
+        loading.classList.add('progress');
+        if (confirm("Você tem certeza que deseja atualizar esse usuário?")) {
+            this.props.store.dispatch(DataApi.update(this.props.selectionType, editId, newValues, this.props.address, loading));
+            document.querySelector('.pessoa_juridica').reset();
+        }
+        else {
+            document.querySelector('.pessoa_juridica').reset();
+            loading.classList.remove('progress');
+        }
     }
 
     render(){
@@ -90,7 +98,7 @@ export default class UsersItemPessoaJuridica extends Component {
                     <label className="type" htmlFor={this.props.id}>{decodeURIComponent(this.props.website)}</label>
                 </td>
 				<td>
-                    <button className="form address" data-id={this.props.id} onClick={this.props.openModalAdress}>See/Edit</button>
+                    <button className="form address" data-id={this.props.id} onClickCapture={(e) =>this.props.openModalAddress(e)}>See/Edit</button>
                 </td>
 				<td>
                     <button className="form" data-id={this.props.id} onClickCapture={(e) => this.openEdit(e)}>Edit</button>

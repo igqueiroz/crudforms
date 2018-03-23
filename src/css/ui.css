@@ -261,7 +261,9 @@ span.alert {
   cursor: pointer;
   padding: 10px 30px;
   background-color: #ccc;
-  border-radius: 30px; }
+  border-radius: 30px;
+  overflow: hidden;
+  margin: 0; }
 
 input[type=radio] + .type-register:hover {
   background-color: #00c8b3;
@@ -401,7 +403,7 @@ input[type=radio]:checked + .type-register {
 #form-contato input.useritem {
   font-size: 0.9em;
   border-bottom: 1px dotted #d62a33;
-  text-align: center;
+  text-align: left;
   height: 30px; }
 
 #form-contato input.blocked {
