@@ -13,13 +13,15 @@ export default class Users extends Component {
         super(props);
         this.state = {
             users: [],
+            usersCopy: [{}],
             empresa: [],
             selectionType: '',
-            modalId: ''
+            modalCurrentUser: 0,
+            modal: false
         };
         this.handleType = this.handleType.bind(this);
         this.genderType = this.genderType.bind(this);
-        this.openModalAddress = this.openModalAddress.bind(this);
+      
         this.handleClose = this.handleClose.bind(this);
     }
 
@@ -30,8 +32,9 @@ export default class Users extends Component {
  			event.target.nextSibling.classList.add('progress');
  			document.querySelector('.pessoa_fisica').classList.add("show-type");
             document.querySelector('.pessoa_juridica').classList.remove("show-type");
-            this.props.routes[0].store.dispatch(DataApi.list('pessoa_fisica',event.target.nextSibling))
-            this.setState({selectionType: 'pessoa_fisica'})
+            this.props.routes[0].store.dispatch(DataApi.list('pessoa_fisica',event.target.nextSibling));
+            this.setState({selectionType: 'pessoa_fisica'});
+            this.setState({usersCopy: this.state.users});
         } else {
         	event.target.nextSibling.classList.add('progress');
         	document.querySelector('.pessoa_fisica').classList.remove("show-type");
@@ -53,19 +56,15 @@ export default class Users extends Component {
 			return 'Female'
 		}
 	}
-	openModalAddress(e) {
-		console.log('eu')
-		e.preventDefault();
-		this.props.routes[0].store.dispatch(DataApi.openModal(true));
-	}
-	
+
 	componentDidMount() {
         this.props.routes[0].store.subscribe(() => {
             // notify é o espaço armazenado na store criado da função de seu reducer
             this.setState({msg: this.props.routes[0].store.getState().notify})
             this.setState({users: this.props.routes[0].store.getState().data})
             this.setState({empresa: this.props.routes[0].store.getState().empresa})
-            this.setState({modal: this.props.routes[0].store.getState().modal})
+            this.setState({modal: this.props.routes[0].store.getState().modal.open})
+            this.setState({modalCurrentUser: this.props.routes[0].store.getState().modal.values})
          })
     }
 	
@@ -106,9 +105,10 @@ export default class Users extends Component {
 							<tbody>
 							{
 
-								this.state.empresa.map(empresa => 
+								this.state.empresa.map((empresa, index) => 
 								<UsersItemPessoaJuridica
 									key={empresa.id}
+									index={index}
 									id={empresa.id}
 									name={empresa.userInfo.name}
 									email={empresa.userInfo.email}
@@ -144,9 +144,10 @@ export default class Users extends Component {
 							</thead>
 							<tbody>
 							{
-								this.state.users.map(users => 
+								this.state.users.map((users, index) => 
 								<UsersItemPessoaFisica
 									key={users.id}
+									index={index}
 									id={users.id}
 									name={users.userInfo.name}
 									email={users.userInfo.email}
@@ -158,7 +159,6 @@ export default class Users extends Component {
 									selectionType={this.state.selectionType}
 									msg={this.state.msg}
 									address={users.address}
-									openModalAdress={this.openModalAdress}
 								/>)
 		                	}
 							</tbody>
@@ -166,12 +166,12 @@ export default class Users extends Component {
 						</div>
 					</form>
 				</div>
-				<Modal show={this.state.modal} onHide={this.handleClose}>
+				<Modal  show={this.state.modal} onHide={this.handleClose}>
 							<Modal.Header closeButton>
-								<Modal.Title>{this.state.users}</Modal.Title>
+								<Modal.Title>{this.state.usersCopy}</Modal.Title>
 							</Modal.Header>
 							<Modal.Body>
-								<h4>Text in a modal</h4>
+								<h4>Endereço</h4>
 							</Modal.Body>
 							<Modal.Footer>
 								<Button onClick={this.handleClose}>Close</Button>

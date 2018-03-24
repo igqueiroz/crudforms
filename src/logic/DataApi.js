@@ -335,10 +335,17 @@ export default class DataApi {
       }
     }
 
-    static openModal(open, newValues, oldValues, loading) {
+    static openModal(open) {
       return dispatch => {
         dispatch({type:'OPENMODAL', open});
       }
     }
+
+    static populateModal(values, loading) {
+      return dispatch => {
+        dispatch({type:'POPULATEMODAL', values});
+      }
+    }
+    
 }
 

@@ -64,7 +64,9 @@ export default class UsersItemPessoaFisica extends Component {
     openModal(e) {
         e.preventDefault();
         const editId = e.currentTarget.getAttribute('data-id');
-        this.props.store.dispatch(DataApi.openModal(true,editId))
+        const editIndex = e.currentTarget.getAttribute('data-index');
+        this.props.store.dispatch(DataApi.populateModal(editIndex));
+        this.props.store.dispatch(DataApi.openModal(true))       
     }
 
     updateRegister(editId, newValues, loading) {
@@ -108,7 +110,7 @@ export default class UsersItemPessoaFisica extends Component {
                     <label className="type" htmlFor={this.props.id}>{decodeURIComponent(this.props.website)}</label>
                 </td>
 				<td>
-                    <button className="form address" data-id={this.props.id} onClickCapture={(e) => this.openModal(e)}>See/Edit</button>
+                    <button className="form address" data-id={this.props.id} data-index={this.props.index} onClickCapture={(e) => this.openModal(e)}>See/Edit</button>
                 </td>
 				<td>
                     <button className="form" data-id={this.props.id} onClickCapture={(e) => this.openEdit(e)}>Edit</button>
