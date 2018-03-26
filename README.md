@@ -27,14 +27,14 @@ A documentação de cada componente registrada diretamente no código
 3. Se precisar gerar o build, abra a pasta raiz do projeto novamente e digite:
 ```npm build```
 
+## Login/ Logout
+> localhost:3000 - Página de login, todas as outras páginas estão protegidas caso não faça login é impossível acessá-las
+
+> localhost:3000/logout - Página que limpa o token (senha com Encode 64 que fica temporariamente disponível no Local Storage) enquanto a sessão está ativa
+
 ## Locais
+> localhost:3000/register - Página de registro de usuários
 
-> localhost:3000 - Front-End
+> localhost:3000/users - Página de listagem e edição
 
-XXXXXXXXXX
-
-## Extra
-
-XXXXXXXXXX
-
-
+> localhost:3000/modules - Página intermediária de escolha dos módulos

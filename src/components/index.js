@@ -27,7 +27,7 @@ export const Oooppsss404 = ( { location } ) =>
 export const Modules = ( { location } ) =>
 	<div className="container">
 		<section>
-				<div className="logo"><Link to="/" title="GeoLocation App" alt="GeoLocation App"><img src="images/mysitelogo@400x-100.png" alt="Laureate International Universities" title="Laureate International Universities" /></Link></div>
+				<div className="logo"><Link to="/" title="CRUD Forms" alt="CRUD Forms App"><img src="images/mysitelogo@400x-100.png" alt="CRUD Forms" title="CRUD Forms" /></Link></div>
 				<div className="row">
 					<div className="col-sm-3" />
 						<div className="col-sm-6">

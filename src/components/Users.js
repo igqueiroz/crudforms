@@ -6,23 +6,21 @@ import { Link } from 'react-router';
 import DataApi  from '../logic/DataApi';
 import UsersItemPessoaJuridica from './UsersItemPessoaJuridica';
 import UsersItemPessoaFisica from './UsersItemPessoaFisica';
-import { Modal, OverlayTrigger, Button  } from 'react-bootstrap';
+import Modals from './Modals';
+import ModalsPJ from './ModalsPJ';
 
 export default class Users extends Component {
 	constructor(props) {
         super(props);
         this.state = {
             users: [],
-            usersCopy: [{}],
             empresa: [],
             selectionType: '',
-            modalCurrentUser: 0,
-            modal: false
+            modal: false,
+            modalPJ: false
         };
         this.handleType = this.handleType.bind(this);
         this.genderType = this.genderType.bind(this);
-      
-        this.handleClose = this.handleClose.bind(this);
     }
 
 	
@@ -32,7 +30,7 @@ export default class Users extends Component {
  			event.target.nextSibling.classList.add('progress');
  			document.querySelector('.pessoa_fisica').classList.add("show-type");
             document.querySelector('.pessoa_juridica').classList.remove("show-type");
-            this.props.routes[0].store.dispatch(DataApi.list('pessoa_fisica',event.target.nextSibling));
+            this.props.routes[0].store.dispatch(DataApi.list('pessoa_fisica', event.target.nextSibling));
             this.setState({selectionType: 'pessoa_fisica'});
             this.setState({usersCopy: this.state.users});
         } else {
@@ -46,9 +44,7 @@ export default class Users extends Component {
 		} 
 	}
 
-	handleClose() {
-		this.props.routes[0].store.dispatch(DataApi.openModal(false));
-	}
+
 	genderType(gender) {
 		if (gender == 'm') {
 			return 'Male';
@@ -64,16 +60,15 @@ export default class Users extends Component {
             this.setState({users: this.props.routes[0].store.getState().data})
             this.setState({empresa: this.props.routes[0].store.getState().empresa})
             this.setState({modal: this.props.routes[0].store.getState().modal.open})
-            this.setState({modalCurrentUser: this.props.routes[0].store.getState().modal.values})
+            this.setState({modalPJ: this.props.routes[0].store.getState().modalPJ.openPJ})
          })
     }
-	
 
 	render() {
 		return(
 			<section>
 				<div className="logo"><Link to="/" title="CRUD Form" alt="CRUD Forms">
-					<img src="" alt="CRUD Forms" title="CRUD Forms" /></Link>
+					<img src="images/mysitelogo@400x-100.png" alt="CRUD Forms" title="CRUD Forms" /></Link>
 				</div>
 				<div className="container">
 					<div className="row">
@@ -143,8 +138,9 @@ export default class Users extends Component {
 							    </tr>
 							</thead>
 							<tbody>
-							{
+							{	
 								this.state.users.map((users, index) => 
+					
 								<UsersItemPessoaFisica
 									key={users.id}
 									index={index}
@@ -159,24 +155,31 @@ export default class Users extends Component {
 									selectionType={this.state.selectionType}
 									msg={this.state.msg}
 									address={users.address}
-								/>)
+									users={this.state.users}
+								/>
+								)
 		                	}
 							</tbody>
 							</Table>
 						</div>
 					</form>
 				</div>
-				<Modal  show={this.state.modal} onHide={this.handleClose}>
-							<Modal.Header closeButton>
-								<Modal.Title>{this.state.usersCopy}</Modal.Title>
-							</Modal.Header>
-							<Modal.Body>
-								<h4>Endereço</h4>
-							</Modal.Body>
-							<Modal.Footer>
-								<Button onClick={this.handleClose}>Close</Button>
-							</Modal.Footer>
-						</Modal>
+				{this.state.modal &&  
+					<Modals
+						users={this.state.users}
+						modal={this.state.modal}
+						store={this.props.routes[0].store}
+						selectionType={this.state.selectionType}
+					/>
+				}
+				{this.state.modalPJ &&  
+					<ModalsPJ
+						empresa={this.state.empresa}
+						modalPJ={this.state.modalPJ}
+						store={this.props.routes[0].store}
+						selectionType={this.state.selectionType}
+					/>
+				}
 			</section>
 		)
 	}

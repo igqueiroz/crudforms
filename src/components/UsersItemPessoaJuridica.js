@@ -40,7 +40,7 @@ export default class UsersItemPessoaJuridica extends Component {
         e.preventDefault();
         e.currentTarget.classList.toggle('close-edit');
         e.currentTarget.previousSibling.classList.toggle('close-edit');
-        document.querySelector('.address').disabled = true;
+        document.querySelector('.address').disabled = false;
         const editId = e.currentTarget.getAttribute('data-id');
         document.querySelectorAll('input.'+ editId).forEach((input) => {
             input.disabled = true;
@@ -58,6 +58,14 @@ export default class UsersItemPessoaJuridica extends Component {
             newValues.push(newValueEdited);
         })
         this.updateRegister(editId,newValues,e.currentTarget.previousSibling);
+    }
+
+    openModal(e) {
+        e.preventDefault();
+        const editId = e.currentTarget.getAttribute('data-id');
+        const editIndex = e.currentTarget.getAttribute('data-index');
+        this.props.store.dispatch(DataApi.populateModalPJ(editIndex));
+        this.props.store.dispatch(DataApi.openModalPJ(true));
     }
 
      updateRegister(editId, newValues, loading) {
@@ -98,7 +106,9 @@ export default class UsersItemPessoaJuridica extends Component {
                     <label className="type" htmlFor={this.props.id}>{decodeURIComponent(this.props.website)}</label>
                 </td>
 				<td>
-                    <button className="form address" data-id={this.props.id} onClickCapture={(e) =>this.props.openModalAddress(e)}>See/Edit</button>
+                    <button className="form address" data-id={this.props.id} data-index={this.props.index} onClickCapture={(e) => this.openModal(e)}>See/Edit
+                    </button>
+
                 </td>
 				<td>
                     <button className="form" data-id={this.props.id} onClickCapture={(e) => this.openEdit(e)}>Edit</button>

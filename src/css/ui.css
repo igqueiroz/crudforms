@@ -286,6 +286,9 @@ input[type=radio]:checked + .type-register {
   transition: .2s ease;
   padding: 0; }
 
+#form-contato .modal-address {
+  width: 54% !important; }
+
 #form-contato .uf {
   text-transform: uppercase; }
 

@@ -40,7 +40,7 @@ export default class UsersItemPessoaFisica extends Component {
         e.preventDefault();
         e.currentTarget.classList.toggle('close-edit');
         e.currentTarget.previousSibling.classList.toggle('close-edit');
-        document.querySelector('.address').disabled = true;
+        document.querySelector('.address').disabled = false;
         const editId = e.currentTarget.getAttribute('data-id');
         document.querySelectorAll('input.'+ editId).forEach((input) => {
             input.disabled = true;
