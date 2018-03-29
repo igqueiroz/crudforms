@@ -46,7 +46,7 @@ export default class Users extends Component {
 
 
 	genderType(gender) {
-		if (gender == 'm') {
+		if (gender === 'm') {
 			return 'Male';
 		} else {
 			return 'Female'

@@ -62,7 +62,6 @@ export default class UsersItemPessoaJuridica extends Component {
 
     openModal(e) {
         e.preventDefault();
-        const editId = e.currentTarget.getAttribute('data-id');
         const editIndex = e.currentTarget.getAttribute('data-index');
         this.props.store.dispatch(DataApi.populateModalPJ(editIndex));
         this.props.store.dispatch(DataApi.openModalPJ(true));

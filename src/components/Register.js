@@ -3,9 +3,8 @@
 
 import React, { Component }  from 'react'
 import ReactDOM from 'react-dom'
-import {Map, GoogleApiWrapper} from 'google-maps-react'
-import DataApi from '../logic/DataApi'
-                
+import { Map, GoogleApiWrapper } from 'google-maps-react'
+import DataApi from '../logic/DataApi'      
 
 export class Register extends Component {
     constructor(props) {
@@ -40,12 +39,35 @@ export class Register extends Component {
     //puxa o form inteiro e coloca em uma string com encodeURI
     serialize(form) {
         if(!form||form.nodeName!=="FORM"){return }
-            let i,j,q=[];for(i=form.elements.length-1;i>=0;i=i-1){
+            let i,j,q=[];for(i=form.elements.length-1;i>=0;i-=1){
                 if(form.elements[i].name===""){continue}
                     switch(form.elements[i].nodeName){
-                        case"INPUT":switch(form.elements[i].type){case"text":case"tel":case"number":case"url":case"email":case"hidden":case"password":case"button":case"reset":case"submit":q.push(form.elements[i].name+"="+encodeURIComponent(form.elements[i].value));break;
-                            case"checkbox":case"radio":if(form.elements[i].checked){q.push(form.elements[i].name+"="+encodeURIComponent(form.elements[i].value))}break;
-                            case"file":break}break;case"TEXTAREA":q.push(form.elements[i].name+"="+encodeURIComponent(form.elements[i].value));break;case"SELECT":switch(form.elements[i].type){case"select-one":q.push(form.elements[i].name+"="+encodeURIComponent(form.elements[i].value));break;case"select-multiple":for(j=form.elements[i].options.length-1;j>=0;j=j-1){if(form.elements[i].options[j].selected){q.push(form.elements[i].name+"="+encodeURIComponent(form.elements[i].options[j].value))}}break}break;case"BUTTON":switch(form.elements[i].type){case"reset":case"submit":case"button":q.push(form.elements[i].name+"="+encodeURIComponent(form.elements[i].value));break}break}}return q.join("&")
+                        case"INPUT":switch(form.elements[i].type){  
+                            case"text":case"tel":case"number":case"url":case"email":case"hidden":case"password":case"button":case"reset":case"submit":q.push(form.elements[i].name+"="+encodeURIComponent(form.elements[i].value));
+                            break;
+                            case"checkbox":case"radio":if(form.elements[i].checked){q.push(form.elements[i].name+"="+encodeURIComponent(form.elements[i].value))}
+                            break;
+                            case"file":break;
+                            default:break}
+                            break;
+                            case"TEXTAREA":q.push(form.elements[i].name+"="+encodeURIComponent(form.elements[i].value));
+                            break;
+                            case"SELECT":switch(form.elements[i].type){
+                                case"select-one":q.push(form.elements[i].name+"="+encodeURIComponent(form.elements[i].value));
+                                break;
+                            case"select-multiple":for(j=form.elements[i].options.length-1;j>=0;j-=1){
+                                if(form.elements[i].options[j].selected){
+                                    q.push(form.elements[i].name+"="+encodeURIComponent(form.elements[i].options[j].value))}}
+                                    break; default:break}
+                                    break;
+                            case"BUTTON":switch(form.elements[i].type){
+                                case"reset":case"submit":case"button":q.push(form.elements[i].name+"="+encodeURIComponent(form.elements[i].value));
+                                break;
+                                default:break;}
+                                break;
+                            default:break;}
+                            }
+                            return q.join("&")
     }
     // realiza as interações com os 2 inputs de nome e password e envio ao estado do componente
     handleChange (event) {
@@ -94,6 +116,19 @@ export class Register extends Component {
             this.setState({msg: this.props.routes[0].store.getState().notify})
          })
     }
+
+    // maskIput() {
+    //     //Masks
+    //     var maskBehavior = function (val) {
+    //      return val.replace(/\D/g, '').length === 11 ? '(00) 00000-0000' : '(00) 0000-00009';
+    //     },
+    //     options = {onKeyPress: function(val, e, field, options) {
+    //      field.mask(maskBehavior.apply({}, arguments), options);
+    //      }
+    //     };
+         
+    //     $('#telephone, #telephone2').mask(maskBehavior, options);
+    // }
    
     renderAutoComplete() {
         const { google } = this.props;
@@ -182,7 +217,7 @@ export class Register extends Component {
                                 <div className="row top-buffer">
                                     
                                     <div className="col-xs-12 extras">
-                                        <input required name="cpf" id="cpf" type="text" className="input" placeholder="Only numbers wihtout . or /" ref="cpf" pattern="\d{11}"  autoComplete="new-password"  onChange={this.handleChange}   />
+                                        <input required name="cpf" id="cpf" type="number" className="input" placeholder="Only numbers" autoComplete="new-password" onChange={this.handleChange}  />
                                         <label htmlFor="txtFullname">CPF</label>
                                     </div>
                                     
@@ -204,7 +239,7 @@ export class Register extends Component {
                                 <div className="row top-buffer">
                                     
                                     <div className="col-xs-12 extras less-margin">
-                                        <input required name="telephone" id="telephone" type="tel" pattern="(\(\d{2}\))\s(\d{4,5})-\d{4}"  className="input" placeholder="(XX) XXXXX-XXXX" ref="telephone" autoComplete="off" onChange={this.handleChange}   />
+                                        <input  required name="telephone" id="telephone" type="tel"   className="input" placeholder="(XX) XXXXX-XXXX"  autoComplete="off" onChange={this.handleChange}   />
                                         <label htmlFor="txtFullname">Telephone</label>
                                     </div>
                                     

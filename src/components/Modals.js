@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 import DataApi from '../logic/DataApi'
-import { Modal, OverlayTrigger, Button  } from 'react-bootstrap';
+import { Modal, Button  } from 'react-bootstrap';
 
 export default class Modals extends Component {
 	constructor(props) {

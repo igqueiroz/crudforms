@@ -68,7 +68,7 @@ export default class DataApi {
                 "country": NewUserData[0],
                 "complement": NewUserData[4],
                 "state": NewUserData[2],
-                "streetNumber": parseInt(NewUserData[6]),
+                "streetNumber": parseFloat(NewUserData[6]),
                 "streetName": NewUserData[7]
               }
           }),
@@ -93,7 +93,7 @@ export default class DataApi {
                 "country": NewUserData[0],
                 "complement": NewUserData[4],
                 "state": NewUserData[2],
-                "streetNumber": parseInt(NewUserData[6]),
+                "streetNumber": parseFloat(NewUserData[6]),
                 "streetName": NewUserData[7]
               }
           }),
@@ -131,8 +131,8 @@ export default class DataApi {
                   },  3000);
                 }
                 else {
-                    throw new Error("Falha na comunicação com o Firebase, tente novamente mais tarde.");
                     document.querySelector('.progress').className = 'locate';
+                    throw new Error("Falha na comunicação com o Firebase, tente novamente mais tarde.");
                 }
             })
             .catch(error => {
@@ -279,7 +279,7 @@ export default class DataApi {
                 "country": encodeURIComponent(oldValues.country),
                 "complement": encodeURIComponent(oldValues.complement),
                 "state": encodeURIComponent(oldValues.state),
-                "streetNumber": parseInt(oldValues.streetNumber),
+                "streetNumber": parseFloat(oldValues.streetNumber),
                 "streetName": encodeURIComponent(oldValues.streetName)
               }
           }),
@@ -304,7 +304,7 @@ export default class DataApi {
                 "country": encodeURIComponent(oldValues.country),
                 "complement": encodeURIComponent(oldValues.complement),
                 "state": encodeURIComponent(oldValues.state),
-                "streetNumber": parseInt(oldValues.streetNumber),
+                "streetNumber": parseFloat(oldValues.streetNumber),
                 "streetName": encodeURIComponent(oldValues.streetName)
               }
           }),
