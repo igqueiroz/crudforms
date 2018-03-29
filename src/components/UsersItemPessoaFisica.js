@@ -32,9 +32,10 @@ export default class UsersItemPessoaFisica extends Component {
 
     deleteUser(e) {
         if (confirm("Você tem certeza que deseja remover esse usuário?")) {
+            e.currentTarget.classList.add('progress');
+            e.currentTarget.setAttribute("src", "./images/1x1.png");
             let editId = (e.currentTarget.classList[0]);
-            this.props.store.dispatch(DataApi.delete(editId,this.props.selectionType))
-            this.props.store.dispatch(DataApi.list('pessoa_fisica'))
+            this.props.store.dispatch(DataApi.delete(editId,this.props.selectionType,e.currentTarget))
         }
     }
 

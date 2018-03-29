@@ -185,7 +185,7 @@ export default class DataApi {
             }) 
       }
     }
-    static delete(userId, typeOfRegister){
+    static delete(userId, typeOfRegister, loading){
       return dispatch => {
         const headers = new Headers();
             headers.append('Content-Type', 'application/json');
@@ -198,13 +198,17 @@ export default class DataApi {
             fetch(`https://paguemob-interview-environment.firebaseapp.com/contacts/` + userId, requestData)
                 .then(response => {
                     if(response.ok) {
-                      this.list(typeOfRegister);
                       const clear = 'Usuário removido com sucesso.';
                       dispatch({type:'SUCCESS', clear});
                       setTimeout(() => {
                           const clear = '';
                           dispatch({type:'SUCCESS', clear});
-
+                          if(typeOfRegister === "pessoa_fisica") {
+                            dispatch(DataApi.list('pessoa_fisica', loading));
+                          }
+                          else {
+                            dispatch(DataApi.list('pessoa_juridica', loading));
+                          }
                       }, 3000);
                     }
                     else {
