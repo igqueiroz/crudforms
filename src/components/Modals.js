@@ -52,16 +52,19 @@ export default class Modals extends Component {
         })
         var newValueEdited = '';
         const newValues = [];
-        document.querySelectorAll('input.'+ editId).forEach((input) => {
+        document.querySelectorAll('.'+ editId).forEach((input) => {
             if(input.value === '' || input.value === undefined || input.value === null) {
-                newValueEdited = input.nextSibling.textContent;
+                newValueEdited = input.textContent;
             }
             else {
                 newValueEdited = input.value;  
             }
             newValues.push(newValueEdited);
-
+            
         })
+        newValues.splice(0, 1);
+        newValues.splice(6, 1);
+        console.log(newValues);
         this.updateRegister(editId, newValues, e.currentTarget.previousSibling);
     }
 

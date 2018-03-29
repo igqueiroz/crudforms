@@ -21,7 +21,7 @@ export default class UsersItemPessoaFisica extends Component {
     	e.preventDefault();
     	e.currentTarget.classList.toggle('close-edit');
         e.currentTarget.nextSibling.classList.toggle('close-edit');
-        document.querySelector('.address').disabled = true;
+
     	const editId = e.currentTarget.getAttribute('data-id');
         document.querySelectorAll('input.'+ editId).forEach((input) => {
     		input.disabled = false;
@@ -62,7 +62,6 @@ export default class UsersItemPessoaFisica extends Component {
         })
         newValues.splice(0, 1);
         newValues.splice(newValues.length-1, 1);
-        console.log(newValues)
         this.updateRegister(editId,newValues,e.currentTarget.previousSibling);
     }
 

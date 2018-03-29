@@ -229,7 +229,7 @@ export default class DataApi {
         headers.append('Authorization', 'Basic ' + localStorage.getItem('auth-token'));
         newValues[3] = selectionType === 'pessoa_fisica' ? (newValues[3] === 'Male') ? "m" : "f" :  newValues[3];
 
-        //quando fizer update evita encoder duplicadamente os valores
+        //quando fizer update evita o encoder duplicado dos valores
         newValues[0] = decodeURIComponent(newValues[0]);
         newValues[1] = decodeURIComponent(newValues[1]);
         newValues[4] = decodeURIComponent(newValues[4]);
@@ -396,7 +396,6 @@ export default class DataApi {
           headers: headers
         }
         const requestData = selectionType === "pessoa_fisica" ? requestDataPessoaFisica : requestDataPessoaJuridica;
-        console.log(requestDataPessoaFisica)
         fetch(`https://paguemob-interview-environment.firebaseapp.com/contacts/` + editId, requestData)
             .then(response => {
                 if(response.ok) {
