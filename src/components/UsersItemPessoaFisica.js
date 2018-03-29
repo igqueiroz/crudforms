@@ -2,6 +2,7 @@
 
 import React, { Component } from 'react';
 import DataApi from '../logic/DataApi'
+import NumberFormat from 'react-number-format';
 
 export default class UsersItemPessoaFisica extends Component {
 	constructor(props) {
@@ -13,6 +14,7 @@ export default class UsersItemPessoaFisica extends Component {
         this.closeEdit = this.closeEdit.bind(this);
         this.deleteUser = this.deleteUser.bind(this);
         this.updateRegister = this.updateRegister.bind(this);
+        this.websiteMask = this.websiteMask.bind(this);
     }
 
     openEdit(e) {
@@ -25,7 +27,7 @@ export default class UsersItemPessoaFisica extends Component {
     		input.disabled = false;
     		input.classList.remove('blocked');
     	})
-        
+        document.querySelector('select.'+ editId).removeAttribute("disabled");    
     }
 
     deleteUser(e) {
@@ -40,24 +42,27 @@ export default class UsersItemPessoaFisica extends Component {
         e.preventDefault();
         e.currentTarget.classList.toggle('close-edit');
         e.currentTarget.previousSibling.classList.toggle('close-edit');
-        document.querySelector('.address').disabled = false;
         const editId = e.currentTarget.getAttribute('data-id');
+        document.querySelector('select.'+ editId).setAttribute("disabled", "disabled");
         document.querySelectorAll('input.'+ editId).forEach((input) => {
             input.disabled = true;
             input.classList.add('blocked');
         })
         var newValueEdited = '';
         const newValues = [];
-        document.querySelectorAll('input.'+ editId).forEach((input) => {
+        document.querySelectorAll('.'+ editId).forEach((input) => {
             if(input.value === '' || input.value === undefined || input.value === null) {
-                newValueEdited = input.nextSibling.textContent;
+                newValueEdited = input.textContent;
             }
             else {
                 newValueEdited = input.value;  
             }
             newValues.push(newValueEdited);
-
+            
         })
+        newValues.splice(0, 1);
+        newValues.splice(newValues.length-1, 1);
+        console.log(newValues)
         this.updateRegister(editId,newValues,e.currentTarget.previousSibling);
     }
 
@@ -72,41 +77,67 @@ export default class UsersItemPessoaFisica extends Component {
         loading.classList.add('progress');
         if (confirm("Você tem certeza que deseja atualizar esse usuário?")) {
             this.props.store.dispatch(DataApi.update(this.props.selectionType, editId, newValues, this.props.address, loading));
-            document.querySelector('.pessoa_fisica').reset();
         }
         else {
-            document.querySelector('.pessoa_fisica').reset();
             loading.classList.remove('progress');
         }
     }
-                                  
+
+    componentDidMount() {
+        let idNumber = this.props.id
+        if (this.props.gender === 'Male') {
+            document.querySelector('select.' + idNumber).value = 'Male';
+        } else {
+            document.querySelector('select.' + idNumber).value = 'Female';
+        }
+    }
+
+    websiteMask(event) {
+        var inputValue = event.target.value;
+        if (inputValue.length === 6 || inputValue.length === 7) {
+            inputValue = 'http://'
+        } else if (inputValue.length < 7) {
+           inputValue = 'http://' + inputValue;
+        }
+        event.target.value = inputValue;
+    }
+
     render(){
+        function telephoneMask(val) {
+            if (val.length <= 10) {
+                let ddd = val.substring(0, 2);
+                let dig1 = val.substring(2, 6);
+                let dig2 = val.substring(6, 10);
+                return '(' + ddd + ') ' + dig1 + '-' + dig2;
+            } else {
+                let ddd = val.substring(0, 2);
+                let dig1 = val.substring(2, 7);
+                let dig2 = val.substring(7, 11);
+                 return '(' + ddd + ') ' + dig1 + '-' + dig2;
+            }
+        }
         return (
         	<tr className={this.props.id}>
     			<td>
-    				<input className={this.props.id + ' input useritem blocked'} type="text" disabled ref={(input) => this.name = input } placeholder="New name" />
-    				<label className="type" htmlFor={this.props.id}>{decodeURIComponent(this.props.name)}</label>
-                    
+    				<input className={this.props.id + ' input useritem blocked'} defaultValue={decodeURIComponent(this.props.name)} type="text" disabled ref={(input) => this.name = input } placeholder="New name" />
     			</td>
 				<td>
-					<input className={this.props.id + ' input useritem blocked'} type="email"  disabled ref={(input) => this.email = input } placeholder="New e-mail" />
-					<label className="type" htmlFor={this.props.id}>{decodeURIComponent(this.props.email)}</label>
+					<input className={this.props.id + ' input useritem blocked'} defaultValue={decodeURIComponent(this.props.email)} type="email"  disabled ref={(input) => this.email = input } placeholder="New e-mail" />
 				</td>
 				<td>
-                    <input className={this.props.id + ' input useritem blocked'} type="number" pattern="\d*" maxLength="11"  disabled ref={(input) => this.cpf = input } placeholder="New CPF" />
-                    <label className="type cpf"  htmlFor={this.props.id}>{decodeURIComponent(this.props.cpf)}</label>
+                    <NumberFormat format="###.###.###-##" className={this.props.id + ' input useritem blocked'} value={decodeURIComponent(this.props.cpf)} type="text" disabled ref={(input) => this.cpf = input } placeholder="New CPF" />
                 </td>
 				<td>
-                    <input className={this.props.id + ' input useritem blocked'} type="text" disabled ref={(input) => this.gender = input }  placeholder="New gender" />
-                    <label className="type" htmlFor={this.props.id}>{decodeURIComponent(this.props.gender)}</label>
+                    <select disabled className={this.props.id + ' select input useritem blocked'}  required name="gender" id="gender" ref={(select) => this.gender = select }>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>                                  
+                    </select>
                 </td>
 				<td>
-                    <input className={this.props.id + ' input useritem blocked'} type="tel" disabled ref={(input) => this.telephone = input } placeholder="Novo telephone" />
-                    <label className="type" htmlFor={this.props.id}>{decodeURIComponent(this.props.telephone)}</label>
+                     <NumberFormat format={telephoneMask} value={decodeURIComponent(this.props.telephone)}  className={this.props.id + ' input useritem blocked'} type="tel" disabled ref={(input) => this.telephone = input } placeholder="Novo telephone" />
                 </td>
-				<td>
-                    <input className={this.props.id + ' input useritem blocked'} type="url" disabled pattern="https?://.+" title="Include http://" ref={(input) => this.website = input }  placeholder="Novo website" />
-                    <label className="type" htmlFor={this.props.id}>{decodeURIComponent(this.props.website)}</label>
+				<td style={{paddingRight: 70}}>
+                    <input className={this.props.id + ' input useritem blocked'} defaultValue={decodeURIComponent(this.props.website)} type="url" disabled pattern="https?://.+" title="Include http://" ref={(input) => this.website = input }  placeholder="Novo website" onChange={this.websiteMask} />
                 </td>
 				<td>
                     <button className="form address" data-id={this.props.id} data-index={this.props.index} onClickCapture={(e) => this.openModal(e)}>See/Edit</button>

@@ -130,7 +130,7 @@ export default class Users extends Component {
 							      <th>Name</th>
 							      <th>Email</th>
 							      <th>CPF</th>
-							      <th width="23px">Gender</th>
+							      <th width="15%">Gender</th>
 							      <th>Telephone</th>
 							      <th>Website</th>
 							      <th>Address</th>

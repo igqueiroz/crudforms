@@ -2,6 +2,7 @@
 
 import React, { Component } from 'react';
 import DataApi from '../logic/DataApi'
+import NumberFormat from 'react-number-format';
 
 export default class UsersItemPessoaJuridica extends Component {
 	constructor(props) {
@@ -13,19 +14,18 @@ export default class UsersItemPessoaJuridica extends Component {
         this.closeEdit = this.closeEdit.bind(this);
         this.deleteUser = this.deleteUser.bind(this);
         this.updateRegister = this.updateRegister.bind(this);
+        this.websiteMask = this.websiteMask.bind(this);
     }
 
     openEdit(e) {
     	e.preventDefault();
     	e.currentTarget.classList.toggle('close-edit');
         e.currentTarget.nextSibling.classList.toggle('close-edit');
-        document.querySelector('.address').disabled = true;
     	const editId = e.currentTarget.getAttribute('data-id');
         document.querySelectorAll('input.'+ editId).forEach((input) => {
     		input.disabled = false;
     		input.classList.remove('blocked');
     	})
-        
     }
 
     deleteUser(e) {
@@ -40,7 +40,6 @@ export default class UsersItemPessoaJuridica extends Component {
         e.preventDefault();
         e.currentTarget.classList.toggle('close-edit');
         e.currentTarget.previousSibling.classList.toggle('close-edit');
-        document.querySelector('.address').disabled = false;
         const editId = e.currentTarget.getAttribute('data-id');
         document.querySelectorAll('input.'+ editId).forEach((input) => {
             input.disabled = true;
@@ -50,7 +49,7 @@ export default class UsersItemPessoaJuridica extends Component {
         const newValues = [];
         document.querySelectorAll('input.'+ editId).forEach((input) => {
             if(input.value === '' || input.value === undefined || input.value === null) {
-                newValueEdited = input.nextSibling.textContent;
+                newValueEdited = input.textContent;
             }
             else {
                 newValueEdited = input.value;
@@ -67,6 +66,16 @@ export default class UsersItemPessoaJuridica extends Component {
         this.props.store.dispatch(DataApi.openModalPJ(true));
     }
 
+    websiteMask(event) {
+        var inputValue = event.target.value;
+        if (inputValue.length === 6 || inputValue.length === 7) {
+            inputValue = 'http://'
+        } else if (inputValue.length < 7) {
+           inputValue = 'http://' + inputValue;
+        }
+        event.target.value = inputValue;
+    }
+
      updateRegister(editId, newValues, loading) {
         loading.classList.add('progress');
         if (confirm("Você tem certeza que deseja atualizar esse usuário?")) {
@@ -80,29 +89,36 @@ export default class UsersItemPessoaJuridica extends Component {
     }
 
     render(){
+        function telephoneMask(val) {
+            if (val.length <= 10) {
+                let ddd = val.substring(0, 2);
+                let dig1 = val.substring(2, 6);
+                let dig2 = val.substring(6, 10);
+                return '(' + ddd + ') ' + dig1 + '-' + dig2;
+            } else {
+                let ddd = val.substring(0, 2);
+                let dig1 = val.substring(2, 7);
+                let dig2 = val.substring(7, 11);
+                 return '(' + ddd + ') ' + dig1 + '-' + dig2;
+            }
+        }
         return (
         	<tr className={this.props.id}>
     			<td>
-    				<input className={this.props.id + ' input useritem blocked'} type="text" disabled ref={(input) => this.name = input } placeholder="New name" />
-    				<label className="type" htmlFor={this.props.id}>{decodeURIComponent(this.props.name)}</label>
-                    
+    				<input className={this.props.id + ' input useritem blocked'} defaultValue={decodeURIComponent(this.props.name)} type="text" disabled ref={(input) => this.name = input } placeholder="New name" />
     			</td>
 				<td>
-					<input className={this.props.id + ' input useritem blocked'} type="email"  disabled ref={(input) => this.email = input } placeholder="New e-mail" />
-					<label className="type" htmlFor={this.props.id}>{decodeURIComponent(this.props.email)}</label>
+					<input defaultValue={decodeURIComponent(this.props.email)} className={this.props.id + ' input useritem blocked'} type="email"  disabled ref={(input) => this.email = input } placeholder="New e-mail" />
 				</td>
 				<td>
-                    <input className={this.props.id + ' input useritem blocked'} type="number" pattern="\d*" maxLength="14"  disabled ref={(input) => this.cpnpj = input } placeholder="New CNPJ" />
-                    <label className="type cnpj"  htmlFor={this.props.id}>{decodeURIComponent(this.props.cnpj)}</label>
+                    <NumberFormat value={decodeURIComponent(this.props.cnpj)} format="##.###.###/####-##" className={this.props.id + ' input useritem blocked'} type="text" disabled ref={(input) => this.cpnpj = input } placeholder="New CNPJ" />
                 </td>
 				
 				<td>
-                    <input className={this.props.id + ' input useritem blocked'} type="tel" disabled ref={(input) => this.telephone = input } placeholder="Novo telephone" />
-                    <label className="type" htmlFor={this.props.id}>{decodeURIComponent(this.props.telephone)}</label>
+                    <NumberFormat format={telephoneMask} value={decodeURIComponent(this.props.telephone)} className={this.props.id + ' input useritem blocked'} type="tel" disabled ref={(input) => this.telephone = input } placeholder="Novo telephone" />
                 </td>
-				<td>
-                    <input className={this.props.id + ' input useritem blocked'} type="url" disabled pattern="https?://.+" title="Include http://" ref={(input) => this.website = input }  placeholder="Novo website" />
-                    <label className="type" htmlFor={this.props.id}>{decodeURIComponent(this.props.website)}</label>
+				<td style={{paddingRight: 70}}>
+                    <input defaultValue={decodeURIComponent(this.props.website)} className={this.props.id + ' input useritem blocked'} type="url" disabled pattern="https?://.+" title="Include http://" ref={(input) => this.website = input }   onChange={this.websiteMask}  placeholder="Novo website" />
                 </td>
 				<td>
                     <button className="form address" data-id={this.props.id} data-index={this.props.index} onClickCapture={(e) => this.openModal(e)}>See/Edit

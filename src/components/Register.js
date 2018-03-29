@@ -4,7 +4,8 @@
 import React, { Component }  from 'react'
 import ReactDOM from 'react-dom'
 import { Map, GoogleApiWrapper } from 'google-maps-react'
-import DataApi from '../logic/DataApi'      
+import DataApi from '../logic/DataApi'
+import NumberFormat from 'react-number-format';
 
 export class Register extends Component {
     constructor(props) {
@@ -27,13 +28,19 @@ export class Register extends Component {
             administrative_area_level_12: '', // uf2
             country2: '', // country2
             postal_code2: '', // zip2
+            cpf: '',
+            cnpj: '',
+            telephone: '',
+            telephone2: ''
         };
+        this.baseState = this.state;
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleType = this.handleType.bind(this);
         this.avoidSubmit = this.avoidSubmit.bind(this);
         this.renderAutoComplete = this.renderAutoComplete.bind(this);
         this.serialize = this.serialize.bind(this);
+        this.resetForm = this.resetForm.bind(this);
     }
 
     //puxa o form inteiro e coloca em uma string com encodeURI
@@ -75,6 +82,9 @@ export class Register extends Component {
         this.setState({[inputId]: event.target.value});
     }
 
+    resetForm(){
+        this.setState(this.baseState)
+    }
     avoidSubmit(event) {
         event.target.addEventListener('keydown', (e) => {
             if(e.keyCode === 13) {
@@ -93,7 +103,14 @@ export class Register extends Component {
             dataSplit = e.split('=');
             dataArray.push(dataSplit[1])
         })
-        this.props.routes[0].store.dispatch(DataApi.register(this.state.selectionType, dataArray));
+        this.props.routes[0].store.dispatch(DataApi.register(this.state.selectionType, dataArray))
+        if (this.state.selectionType === "pessoa_fisica") {
+            document.querySelector('.pessoa_fisica').reset();
+            this.resetForm();
+        } else {
+            document.querySelector('.pessoa_juridica').reset();
+            this.resetForm();
+        }
     }
 
     handleType(event) {
@@ -110,26 +127,23 @@ export class Register extends Component {
         }       
     }
 
-     componentDidMount() {
+    componentDidMount() {
         this.props.routes[0].store.subscribe(() => {
             // notify é o espaço armazenado na store criado da função de seu reducer
             this.setState({msg: this.props.routes[0].store.getState().notify})
          })
     }
 
-    // maskIput() {
-    //     //Masks
-    //     var maskBehavior = function (val) {
-    //      return val.replace(/\D/g, '').length === 11 ? '(00) 00000-0000' : '(00) 0000-00009';
-    //     },
-    //     options = {onKeyPress: function(val, e, field, options) {
-    //      field.mask(maskBehavior.apply({}, arguments), options);
-    //      }
-    //     };
-         
-    //     $('#telephone, #telephone2').mask(maskBehavior, options);
-    // }
-   
+    websiteMask(event) {
+        var inputValue = event.target.value;
+        if (inputValue.length === 6 || inputValue.length === 7) {
+            inputValue = 'http://'
+        } else if (inputValue.length < 7) {
+           inputValue = 'http://' + inputValue;
+        }
+        event.target.value = inputValue;
+    }
+
     renderAutoComplete() {
         const { google } = this.props;
         const aref = this.refs.autocomplete;
@@ -178,6 +192,19 @@ export class Register extends Component {
     }
 
     render() {
+    function telephoneMask(val) {
+        if (val.length <= 10) {
+            let ddd = val.substring(0, 2);
+            let dig1 = val.substring(2, 6);
+            let dig2 = val.substring(6, 10);
+            return '(' + ddd + ') ' + dig1 + '-' + dig2;
+        } else {
+            let ddd = val.substring(0, 2);
+            let dig1 = val.substring(2, 7);
+            let dig2 = val.substring(7, 11);
+             return '(' + ddd + ') ' + dig1 + '-' + dig2;
+        }
+    }
         return (
             <section className="destaques">
                 <div className="container">
@@ -215,16 +242,13 @@ export class Register extends Component {
                                 </div>
 
                                 <div className="row top-buffer">
-                                    
                                     <div className="col-xs-12 extras">
-                                        <input required name="cpf" id="cpf" type="number" className="input" placeholder="Only numbers" autoComplete="new-password" onChange={this.handleChange}  />
+                                        <NumberFormat format="###.###.###-##" required name="cpf"  ref="cpf" id="cpf" className="input" placeholder="Only numbers" autoComplete="new-password" onChange={this.handleChange}   value={this.state.cpf}  />
                                         <label htmlFor="txtFullname">CPF</label>
                                     </div>
-                                    
                                 </div>
 
                                 <div className="row top-buffer">
-                               
                                     <div className="form-group col-xs-12 extras">
                                         <select required name="gender" id="gender" className="select" ref="gender" onChange={this.handleChange}>
                                             <option defaultValue hidden> Select one</option>
@@ -233,25 +257,20 @@ export class Register extends Component {
                                         </select>
                                         <label htmlFor="txtFullname">Gender</label>
                                     </div>
-                                    
                                 </div>
 
-                                <div className="row top-buffer">
-                                    
+                                <div className="row top-buffer"> 
                                     <div className="col-xs-12 extras less-margin">
-                                        <input  required name="telephone" id="telephone" type="tel"   className="input" placeholder="(XX) XXXXX-XXXX"  autoComplete="off" onChange={this.handleChange}   />
+                                        <NumberFormat format={telephoneMask}  required name="telephone" ref="telephone" id="telephone" type="tel"   className="input" placeholder="(XX) XXXXX-XXXX"  autoComplete="off" onChange={this.handleChange}    value={this.state.telephone}  />
                                         <label htmlFor="txtFullname">Telephone</label>
                                     </div>
-                                    
                                 </div>
 
                                 <div className="row top-buffer">
-                                   
                                     <div className="col-xs-12 extras">
-                                        <input required name="website" id="website" type="url" className="input" placeholder="http://yoursite.com" ref="website" autoComplete="off" onChange={this.handleChange}   />
+                                        <input required name="website" id="website" type="text" className="input" placeholder="http://yoursite.com" ref="website" autoComplete="off" onChange={this.websiteMask}  />
                                         <label htmlFor="txtFullname">Website</label>
                                     </div>
-                                    
                                 </div>
                             </div>
 
@@ -260,7 +279,7 @@ export class Register extends Component {
                                 <div className="row top-buffer">
                                  
                                     <div className="col-xs-12 extras">
-                                        <input required name="fullAddress" id="fullAdress" type="text" className="input" placeholder="Fill with full address. Press ESC to avoid Chrome AutoFill" ref="autocomplete" autoComplete="new-password" onChange={this.avoidSubmit}    />
+                                        <input required name="fullAddress" id="fullAdress" type="text" className="input" placeholder="Fill with full address. Press ESC to avoid Chrome AutoFill" ref="autocomplete" autoComplete="new-password" onChange={this.avoidSubmit} />
                                         <label htmlFor="fullAddress">Full Address</label>
                                     </div>
                                     
@@ -269,7 +288,7 @@ export class Register extends Component {
                                 <div className="row top-buffer">
                                  
                                     <div className="col-xs-9 extras">
-                                        <input required name="route" id="route" type="text" className="input" ref="route" placeholder="Rua/ Av." autoComplete="new-password" value={this.state.route}  onChange={this.handleChange}    />
+                                        <input required name="route" id="route" type="text" className="input" ref="route" placeholder="Rua/ Av." autoComplete="new-password" value={this.state.route} onChange={this.handleChange} />
                                         <label htmlFor="street">Street</label>
                                     </div>
                                     <div className="col-xs-3 extras">
@@ -311,7 +330,7 @@ export class Register extends Component {
                                 <div className="row top-buffer">
                                     
                                     <div className="col-xs-10 extras">
-                                        <input required name="postal_code" id="postal_code" type="text" className="input" placeholder="XXXXX-XXX" ref="postal_code" autoComplete="off" onChange={this.handleChange}  value={this.state.postal_code}   />
+                                        <NumberFormat format="#####-###" required name="postal_code" id="postal_code" type="text" className="input" placeholder="XXXXX-XXX" ref="postal_code" autoComplete="off" onChange={this.handleChange}  value={this.state.postal_code}   />
                                         <label htmlFor="txtFullname">Zipcode</label>
                                     </div>
                                     <div className="col-xs-2 extras">
@@ -353,7 +372,7 @@ export class Register extends Component {
                                 <div className="row top-buffer">
                                     
                                     <div className="col-xs-12 extras">
-                                        <input required name="cnpj" id="cnpj" type="type" className="input" placeholder="Only numbers wihtout . or /" ref="cnpj" pattern="\d{14}"  autoComplete="new-password"  onChange={this.handleChange}   />
+                                        <NumberFormat format="##.###.###/####-##" required name="cnpj" id="cnpj" type="text" className="input" placeholder="Only numbers" ref="cnpj"  autoComplete="new-password"  onChange={this.handleChange}   value={this.state.cnpj}   />
                                         <label htmlFor="txtFullname">CNPJ</label>
                                     </div>
                                     
@@ -362,7 +381,7 @@ export class Register extends Component {
                                 <div className="row top-buffer">
                                     
                                     <div className="col-xs-12 extras">
-                                        <input required name="telephone2" id="telephone2" type="tel" pattern="(\(\d{2}\))\s(\d{4,5})-\d{4}"  className="input" placeholder="(XX) XXXXX-XXXX" ref="telephone2" autoComplete="off" onChange={this.handleChange}   />
+                                        <NumberFormat format={telephoneMask} required name="telephone2" id="telephone2" type="tel" pattern="(\(\d{2}\))\s(\d{4,5})-\d{4}" className="input" placeholder="(XX) XXXXX-XXXX" ref="telephone2" autoComplete="off" onChange={this.handleChange}  value={this.state.telephone2}   />
                                         <label htmlFor="txtFullname">Telephone</label>
                                     </div>
                                     
@@ -371,7 +390,7 @@ export class Register extends Component {
                                 <div className="row top-buffer">
                                    
                                     <div className="col-xs-12 extras">
-                                        <input required name="website2" id="website2" type="url" className="input" placeholder="http://yoursite.com" ref="website2" autoComplete="off" onChange={this.handleChange}   />
+                                        <input required name="website2" id="website2" type="url" className="input" placeholder="http://yoursite.com" ref="website2" autoComplete="off" onChange={this.websiteMask} />
                                         <label htmlFor="txtFullname">Website</label>
                                     </div>
                                     
@@ -434,7 +453,7 @@ export class Register extends Component {
                                 <div className="row top-buffer">
                                     
                                     <div className="col-xs-10 extras">
-                                        <input required name="postal_code2" id="postal_code2" type="text" className="input"  placeholder="XXXXX-XXX" minLength="8" ref="postal_code2" autoComplete="off" onChange={this.handleChange}  value={this.state.postal_code2}   />
+                                        <NumberFormat format="#####-###" required name="postal_code2" id="postal_code2" type="text" className="input"  placeholder="XXXXX-XXX" minLength="8" ref="postal_code2" autoComplete="off" onChange={this.handleChange}  value={this.state.postal_code2} />
                                         <label htmlFor="txtFullname">Zipcode</label>
                                     </div>
                                     <div className="col-xs-2 extras">

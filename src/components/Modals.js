@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 import DataApi from '../logic/DataApi'
 import { Modal, Button  } from 'react-bootstrap';
+import NumberFormat from 'react-number-format';
 
 export default class Modals extends Component {
 	constructor(props) {
@@ -100,37 +101,37 @@ export default class Modals extends Component {
                     <form id="form-contato" onSubmit={this.handleSubmit}>
                         <div className="row">
                             <div className="col-xs-6 extras">
-                                <p><strong>Street:</strong> <input name="name" type="text" className={'modal-address input useritem blocked ' + this.props.users[modalUser].id} ref={(input) => this.name = input } disabled defaultValue={decodeURIComponent(this.props.users[modalUser].address.streetName)} onChange={this.handleChange} /> </p>
+                                <p><strong>Street:</strong> <input name="street" type="text" className={'modal-address input useritem blocked ' + this.props.users[modalUser].id} ref={(input) => this.name = input } disabled defaultValue={decodeURIComponent(this.props.users[modalUser].address.streetName)} onChange={this.handleChange} /> </p>
                             </div>
  
                             <div className="col-xs-6 extras">
-                                <p><strong>Number:</strong> <input type="email" className={'modal-address input useritem blocked ' + this.props.users[modalUser].id} disabled defaultValue={decodeURIComponent(this.props.users[modalUser].address.streetNumber)} /> </p>
+                                <p><strong>Number:</strong> <input type="number" className={'modal-address input useritem blocked ' + this.props.users[modalUser].id} disabled defaultValue={decodeURIComponent(this.props.users[modalUser].address.streetNumber)} /> </p>
                             </div>
                         </div>
                         <div className="row">
                             <div className="col-xs-6 extras">
-                                <p><strong>Neighborhood:</strong> <input type="email" className={'modal-address input useritem blocked ' + this.props.users[modalUser].id} disabled defaultValue={decodeURIComponent(this.props.users[modalUser].address.neighborhood)} /></p>
+                                <p><strong>Neighborhood:</strong> <input type="text" className={'modal-address input useritem blocked ' + this.props.users[modalUser].id} disabled defaultValue={decodeURIComponent(this.props.users[modalUser].address.neighborhood)} /></p>
                             </div>
                             <div className="col-xs-6 extras">
-                                <p><strong>Complement:</strong> <input type="email" className={'modal-address input useritem blocked ' + this.props.users[modalUser].id} disabled defaultValue={decodeURIComponent(this.props.users[modalUser].address.complement)} /> </p>
-                            </div>
-                        </div>
-
-                        <div className="row">
-                            <div className="col-xs-6 extras">
-                                <p><strong>City:</strong> <input type="email" className={'modal-address input useritem blocked ' + this.props.users[modalUser].id} disabled defaultValue={decodeURIComponent(this.props.users[modalUser].address.city)} /> </p>
-                            </div>
-                            <div className="col-xs-6 extras">
-                                <p><strong>State:</strong> <input type="email" className={'modal-address input useritem blocked ' + this.props.users[modalUser].id} disabled defaultValue={decodeURIComponent(this.props.users[modalUser].address.state)} /> </p>
+                                <p><strong>Complement:</strong> <input type="text" className={'modal-address input useritem blocked ' + this.props.users[modalUser].id} disabled defaultValue={decodeURIComponent(this.props.users[modalUser].address.complement)} /> </p>
                             </div>
                         </div>
 
                         <div className="row">
                             <div className="col-xs-6 extras">
-                                <p><strong>Zipcode:</strong> <input type="email" className={'modal-address input useritem blocked ' + this.props.users[modalUser].id} disabled defaultValue={decodeURIComponent(this.props.users[modalUser].address.zip)} /> </p>
+                                <p><strong>City:</strong> <input type="text" className={'modal-address input useritem blocked ' + this.props.users[modalUser].id} disabled defaultValue={decodeURIComponent(this.props.users[modalUser].address.city)} /> </p>
                             </div>
                             <div className="col-xs-6 extras">
-                                <p><strong>Country:</strong> <input type="email" className={'modal-address input useritem blocked ' + this.props.users[modalUser].id} disabled defaultValue={decodeURIComponent(this.props.users[modalUser].address.country)} /></p>
+                                <p><strong>State:</strong> <input type="text" className={'modal-address input useritem blocked ' + this.props.users[modalUser].id} disabled defaultValue={decodeURIComponent(this.props.users[modalUser].address.state)} /> </p>
+                            </div>
+                        </div>
+
+                        <div className="row">
+                            <div className="col-xs-6 extras">
+                                <p><strong>Zipcode:</strong> <NumberFormat format="#####-###" type="text" className={'modal-address input useritem blocked ' + this.props.users[modalUser].id} disabled value={decodeURIComponent(this.props.users[modalUser].address.zip)} /> </p>
+                            </div>
+                            <div className="col-xs-6 extras">
+                                <p><strong>Country:</strong> <input type="text" className={'modal-address input useritem blocked ' + this.props.users[modalUser].id} disabled defaultValue={decodeURIComponent(this.props.users[modalUser].address.country)} /></p>
                             </div>
                         </div>
 

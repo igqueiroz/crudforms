@@ -109,25 +109,6 @@ export default class DataApi {
                   setTimeout(() => {
                     const clear = '';
                     dispatch({type:'SUCCESS', clear});
-                     // Limpa o formulário após a inserção do usuário
-                    if (selectionType ==="pessoa_fisica") {
-                      document.querySelector('.pessoa_fisica').reset();
-                      document.querySelector('#route').value = "";
-                      document.querySelector('#street_number').value = "";
-                      document.querySelector('#sublocality_level_1').value = "";
-                      document.querySelector('#administrative_area_level_2').value = "";
-                      document.querySelector('#administrative_area_level_1').value = "";
-                      document.querySelector('#postal_code').value = "";
-                    } else {
-                      document.querySelector('.pessoa_juridica').reset();
-                      document.querySelector('#route2').value = "";
-                      document.querySelector('#street_number2').value = "";
-                      document.querySelector('#sublocality_level_12').value = "";
-                      document.querySelector('#administrative_area_level_22').value = "";
-                      document.querySelector('#administrative_area_level_12').value = "";
-                      document.querySelector('#postal_code2').value = "";
-                      document.querySelector('#country2').value = "";
-                    }
                   },  3000);
                 }
                 else {
@@ -415,10 +396,10 @@ export default class DataApi {
           headers: headers
         }
         const requestData = selectionType === "pessoa_fisica" ? requestDataPessoaFisica : requestDataPessoaJuridica;
+        console.log(requestDataPessoaFisica)
         fetch(`https://paguemob-interview-environment.firebaseapp.com/contacts/` + editId, requestData)
             .then(response => {
                 if(response.ok) {
-                  debugger;
                   const clear = 'O endereço foi atualizado com sucesso.';
                   dispatch({type:'SUCCESS', clear});
                   

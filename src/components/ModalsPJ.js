@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 import DataApi from '../logic/DataApi'
 import { Modal, Button  } from 'react-bootstrap';
+import NumberFormat from 'react-number-format';
 
 export default class ModalsPJ extends Component {
 	constructor(props) {
@@ -104,33 +105,33 @@ export default class ModalsPJ extends Component {
                             </div>
  
                             <div className="col-xs-6 extras">
-                                <p><strong>Number:</strong> <input type="email" className={'modal-address input useritem blocked ' + this.props.empresa[modalUser].id} disabled defaultValue={decodeURIComponent(this.props.empresa[modalUser].address.streetNumber)} /> </p>
+                                <p><strong>Number:</strong> <input type="number" className={'modal-address input useritem blocked ' + this.props.empresa[modalUser].id} disabled defaultValue={decodeURIComponent(this.props.empresa[modalUser].address.streetNumber)} /> </p>
                             </div>
                         </div>
                         <div className="row">
                             <div className="col-xs-6 extras">
-                                <p><strong>Neighborhood:</strong> <input type="email" className={'modal-address input useritem blocked ' + this.props.empresa[modalUser].id} disabled defaultValue={decodeURIComponent(this.props.empresa[modalUser].address.neighborhood)} /></p>
+                                <p><strong>Neighborhood:</strong> <input type="text" className={'modal-address input useritem blocked ' + this.props.empresa[modalUser].id} disabled defaultValue={decodeURIComponent(this.props.empresa[modalUser].address.neighborhood)} /></p>
                             </div>
                             <div className="col-xs-6 extras">
-                                <p><strong>Complement:</strong> <input type="email" className={'modal-address input useritem blocked ' + this.props.empresa[modalUser].id} disabled defaultValue={decodeURIComponent(this.props.empresa[modalUser].address.complement)} /> </p>
-                            </div>
-                        </div>
-
-                        <div className="row">
-                            <div className="col-xs-6 extras">
-                                <p><strong>City:</strong> <input type="email" className={'modal-address input useritem blocked ' + this.props.empresa[modalUser].id} disabled defaultValue={decodeURIComponent(this.props.empresa[modalUser].address.city)} /> </p>
-                            </div>
-                            <div className="col-xs-6 extras">
-                                <p><strong>State:</strong> <input type="email" className={'modal-address input useritem blocked ' + this.props.empresa[modalUser].id} disabled defaultValue={decodeURIComponent(this.props.empresa[modalUser].address.state)} /> </p>
+                                <p><strong>Complement:</strong> <input type="text" className={'modal-address input useritem blocked ' + this.props.empresa[modalUser].id} disabled defaultValue={decodeURIComponent(this.props.empresa[modalUser].address.complement)} /> </p>
                             </div>
                         </div>
 
                         <div className="row">
                             <div className="col-xs-6 extras">
-                                <p><strong>Zipcode:</strong> <input type="email" className={'modal-address input useritem blocked ' + this.props.empresa[modalUser].id} disabled defaultValue={decodeURIComponent(this.props.empresa[modalUser].address.zip)} /> </p>
+                                <p><strong>City:</strong> <input type="text" className={'modal-address input useritem blocked ' + this.props.empresa[modalUser].id} disabled defaultValue={decodeURIComponent(this.props.empresa[modalUser].address.city)} /> </p>
                             </div>
                             <div className="col-xs-6 extras">
-                                <p><strong>Country:</strong> <input type="email" className={'modal-address input useritem blocked ' + this.props.empresa[modalUser].id} disabled defaultValue={decodeURIComponent(this.props.empresa[modalUser].address.country)} /></p>
+                                <p><strong>State:</strong> <input type="text" className={'modal-address input useritem blocked ' + this.props.empresa[modalUser].id} disabled defaultValue={decodeURIComponent(this.props.empresa[modalUser].address.state)} /> </p>
+                            </div>
+                        </div>
+
+                        <div className="row">
+                            <div className="col-xs-6 extras">
+                                <p><strong>Zipcode:</strong> <NumberFormat format="#####-###" type="text" className={'modal-address input useritem blocked ' + this.props.empresa[modalUser].id} disabled value={decodeURIComponent(this.props.empresa[modalUser].address.zip)} /> </p>
+                            </div>
+                            <div className="col-xs-6 extras">
+                                <p><strong>Country:</strong> <input type="text" className={'modal-address input useritem blocked ' + this.props.empresa[modalUser].id} disabled defaultValue={decodeURIComponent(this.props.empresa[modalUser].address.country)} /></p>
                             </div>
                         </div>
 

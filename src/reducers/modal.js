@@ -3,7 +3,6 @@
 export function modal(modal=false, action){
   // reducer que recebe o fetch na API criada e devolve os dados recebidos
   if(action.type === 'OPENMODAL'){
-    console.log(action)
     return action;
   }
 
